@@ -9,7 +9,7 @@ const hrSchema = new mongoose.Schema({
         maxlength: [20, "Name size must be of 20 characters."],
         minlength: [3, "Name length must be at least of 3 characters"]
     },
-    department: {
+    companyName: {
         type: String,
         required: true
     },
@@ -53,7 +53,7 @@ const hrSchema = new mongoose.Schema({
         type: String,
         default: "pending"
     },
-    cartItems: {
+    sortlistedProfiles: {
         type: Array,
     },
     type: {

@@ -1,10 +1,12 @@
 const express = require("express");
+const HRModel = require("../models/hr_model");
 const router = express.Router();
 const StudentModel = require('../models/student_model');
 
 
 
 router.get("/viewall", async (req, res)=>{
+    //View all users
     try {
         const dbResponse = await StudentModel.find({});
         res.status(200).json(dbResponse);
@@ -15,6 +17,7 @@ router.get("/viewall", async (req, res)=>{
 });
 
 router.get("/search/:sid", async (req, res)=> {
+    //Search user by Id
     const studentId = req.params.sid;
     try {
         const dbResponse = await StudentModel.findById(studentId);
@@ -26,6 +29,7 @@ router.get("/search/:sid", async (req, res)=> {
 });
 
 router.get("/search/branch/:name", async (req, res)=> {
+    //Search user by branch name
     const studentBranch = req.params.name.toUpperCase();
     try {
         const dbResponse = await StudentModel.find({branch: studentBranch});
@@ -38,13 +42,14 @@ router.get("/search/branch/:name", async (req, res)=> {
 
 
 router.get("/search/skills/:name", async (req, res)=> {
+    //Search user by skills
     const skills = req.params.name;
     try {
-        const dbResponse = await StudentModel.find({skills: skills});
+        const dbResponse = await StudentModel.find({skills: {$in: [skills]}});
         console.log(dbResponse);
         res.status(200).json(dbResponse);
     } catch (error) {
-        res.status(400).json("Invalid branch");
+        res.status(400).json("Not found, Error: "+error.message);
     }
 });
 
@@ -69,6 +74,26 @@ router.post("/signup", async (req, res)=>{
 });
 
 
+
+router.post("/signin", async (req, res)=>{
+    const {email, password} = req.body;
+    if(!email || !password){
+        res.status(420).json("Please fill input fields properly.");
+    }else{
+        try {
+            const dbResponse = await StudentModel.findOne({email, password});
+            if(dbResponse){
+                res.status(200).json(dbResponse);
+            }else{
+                throw new Error();
+            }
+        } catch (error) {
+            res.status(400).json("Invalid login credential.");
+        }
+    }
+});
+
+
 router.put("/update/:sid", async (req, res)=>{
     const studentId = req.params.sid;
     const clientData = req.body;
@@ -86,7 +111,11 @@ router.delete("/delete/:sid", async (req, res)=>{
     try {
         const dbResponse = await StudentModel.findByIdAndDelete(studentId);
        console.log(dbResponse);
-       res.status(200).json("Profile deleted successfully.");
+       if(dbResponse){
+        res.status(200).json("Profile deleted successfully.");
+       }else{
+           throw new Error();
+       }
     } catch (error) {
         res.status(400).json("Invalid student Id.");
     }
