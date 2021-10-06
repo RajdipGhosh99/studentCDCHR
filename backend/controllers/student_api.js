@@ -2,6 +2,7 @@ const express = require("express");
 const HRModel = require("../models/hr_model");
 const router = express.Router();
 const StudentModel = require('../models/student_model');
+const jwt = require('jsonwebtoken');
 
 
 

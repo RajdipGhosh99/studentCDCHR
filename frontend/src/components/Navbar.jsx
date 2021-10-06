@@ -1,6 +1,11 @@
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import {currentUserDataContext} from "../App";
 
 const Navbar=()=>{
+
+    const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
+
 return(
     <>
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -22,11 +27,18 @@ return(
                             <NavLink className="nav-link active" aria-current="page" to="/">About</NavLink>
                         </li>
 
+                        <li className="nav-item">
+                            <NavLink className="nav-link active" aria-current="page" to="/profile">My Profile</NavLink>
+                        </li>
 
 
-
-
-                        <li className="nav-item dropdown">
+                        {
+                            currentUserData.isAlreadyLogin ? 
+                            <li className="nav-item">
+                              <NavLink className="nav-link active" aria-current="page" to="/">Log Out</NavLink>
+                            </li>
+                            : <>
+                             <li className="nav-item dropdown">
                             <NavLink className="nav-link dropdown-toggle" to="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Sign Up
                             </NavLink>
@@ -51,14 +63,11 @@ return(
 
                             </ul>
                         </li>
+                        </>
+                    }
 
-                        <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" to="/">My Profile</NavLink>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" to="/">Log Out</NavLink>
-                        </li>
-
+                      
+                        
                     </ul>
                 </div>
             </div>

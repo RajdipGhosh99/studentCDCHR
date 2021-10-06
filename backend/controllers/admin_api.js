@@ -4,7 +4,7 @@ const router = express.Router();
 
 
 router.post("/signin", (req, res)=>{
-    const adminEmail = "admin";
+    const adminEmail = "admin@gmail.com";
     const adminPassword = "admin";
     const {email, password} = req.body;
     if(adminEmail==email && adminPassword==password){

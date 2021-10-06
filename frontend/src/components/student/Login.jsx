@@ -1,15 +1,22 @@
 import axios from 'axios';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
+import {currentUserDataContext} from "../../App";
+import { useHistory } from 'react-router';
 
 
 
 const Login = () => {
 
 
+    const {currentUserData, setCurrentUserData}  = useContext(currentUserDataContext);
+    const history = useHistory();
+
     const [inputFormData, setInputFormData] = useState({
         email: "",
         password: ""
     });
+
+    console.log(currentUserData)
 
     const inputFieldChange = (event) => {
        const fieldName = event.target.name;
@@ -27,14 +34,21 @@ const Login = () => {
             const serverResponse = await axios.post(apiUrl, inputFormData);
             if(serverResponse.status == 200){
                 alert("Login Successfull.");
+                setCurrentUserData({...currentUserData, isAlreadyLogin: true});
+                setTimeout(()=>{
+                    history.push("/");
+                }, 2000);
             } 
         } catch (error) {
+            setCurrentUserData({...currentUserData, isAlreadyLogin: false});
             alert(error.response.data);
         }
     }
 
     return (
     <>
+    <div >
+    <h2 style={{marginTop: "70px", textAlign: "center"}}>Student Login</h2>
     <form action="POST" className="login" onSubmit={studentLoginFormSubmit}>
                 
                     <div className="mb-3">
@@ -52,6 +66,7 @@ const Login = () => {
                     </div> */}
                     <button type="submit" className="btn btn-primary">Submit</button>
     </form>
+    </div>
 
     </>
     );
