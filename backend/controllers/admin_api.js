@@ -14,14 +14,29 @@ router.post("/signin", (req, res)=>{
     }
 });
 
-router.put("/hr-requsts/:hrid", async (req, res)=> {
+router.put("/hr-request/add/:hrid", async (req, res)=> {
     const hrId = req.params.hrid;
     try {
-        const dbResponse = await AdminModel.updateOne({$push: {hrId: hrId}});
-        console.log(dbResponse);
+        const dbResponse = await AdminModel.updateOne({$push: {hrRequests: hrId}});
         res.status(200).json("Data save successfully.")
     } catch (error) {
         res.status(400).json("Data not saved. Error: "+error.message);
+    }
+});
+
+router.delete("/hr-request/remove/:hrid", async (req, res)=>{
+    const hrid = req.params.hrid;
+    try {
+        const dbResponse = await AdminModel.updateOne({$pull: {hrRequests: hrid}});
+        console.log(dbResponse);
+        if(dbResponse.modifiedCount>0){
+            res.status(200).json("Data removed successfully.");
+        }else{
+            throw new Error();
+        } 
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).json("Data not removed.");
     }
 });
 
