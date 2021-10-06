@@ -107,6 +107,19 @@ router.put("/update/:sid", async (req, res)=>{
     }
 });
 
+
+router.put("/skills/update/:sid", async (req, res)=>{
+    const studentId = req.params.sid;
+    const skill = req.body.skill;
+    console.log();
+    try {
+        const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$push: {skills: skill}}, {new: true});
+        res.status(200).json(dbResponse);
+    } catch (error) {
+        res.status(400).json("User not update. Invalid student id");
+    }
+});
+
 router.delete("/delete/:sid", async (req, res)=>{
     const studentId = req.params.sid;
     try {

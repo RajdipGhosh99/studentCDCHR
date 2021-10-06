@@ -5,6 +5,7 @@ import {currentUserDataContext} from "../App";
 const Navbar=()=>{
 
     const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
+    console.log(currentUserData.name)
 
 return(
     <>
@@ -27,15 +28,17 @@ return(
                             <NavLink className="nav-link active" aria-current="page" to="/">About</NavLink>
                         </li>
 
-                        <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" to="/profile">My Profile</NavLink>
-                        </li>
-
+                        {
+                            currentUserData.isAlreadyLogin ? 
+                                            <li className="nav-item">
+                                                <NavLink className="nav-link active" aria-current="page"  to={currentUserData.type == "admin" ? "/admin/dashboard" :  currentUserData.type == "student" ? "/student/profile" : "/hr/profile"} >{currentUserData.type == "admin" ? "Dashboard" : "My Profile"}</NavLink>
+                                            </li> : null
+                        }
 
                         {
                             currentUserData.isAlreadyLogin ? 
                             <li className="nav-item">
-                              <NavLink className="nav-link active" aria-current="page" to="/">Log Out</NavLink>
+                              <NavLink className="nav-link active" aria-current="page" to="/logout">Log Out</NavLink>
                             </li>
                             : <>
                              <li className="nav-item dropdown">
@@ -50,6 +53,8 @@ return(
                             </ul>
                         </li>
 
+                     
+
                         <li className="nav-item dropdown">
                             <NavLink className="nav-link dropdown-toggle" to="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Log In
@@ -63,8 +68,17 @@ return(
 
                             </ul>
                         </li>
+                       
                         </>
                     }
+
+                    {
+                        currentUserData.isAlreadyLogin ? 
+                        <li className="nav-item">
+                            <NavLink className="nav-link disabled text-black" aria-current="page" to="#" >{currentUserData.name} ({currentUserData.type})</NavLink>
+                        </li> : null
+                    }
+                    
 
                       
                         

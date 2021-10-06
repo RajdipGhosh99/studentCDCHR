@@ -1,10 +1,14 @@
 import axios from 'axios';
-import {useState} from 'react';
+import {useState, useContext} from 'react';
+import {currentUserDataContext} from "../../App";
+import { useHistory } from 'react-router';
 
 
 
 const AdminLogin = ()=>{
 
+    const {currentUserData, setCurrentUserData}  = useContext(currentUserDataContext);
+    const history = useHistory();
     const [inputFormData, setInputFormData] = useState({
         email: "",
         password: ""
@@ -24,10 +28,17 @@ const AdminLogin = ()=>{
         try {
             const apiUrl = `http://localhost:8000/admin/signin`;
             const serverResponse = await axios.post(apiUrl, inputFormData);
+            console.log(serverResponse)
             if(serverResponse.status == 200){
                 alert("Login Successfull.");
+                const data = serverResponse.data;
+                setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, type: data.type});
+                setTimeout(()=>{
+                    history.push("/");
+                }, 400);
             } 
         } catch (error) {
+            setCurrentUserData({...currentUserData, isAlreadyLogin: false});
             alert(error.response.data);
         }
     }

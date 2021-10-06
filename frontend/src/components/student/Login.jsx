@@ -33,11 +33,12 @@ const Login = () => {
             const apiUrl = `http://localhost:8000/student/signin`;
             const serverResponse = await axios.post(apiUrl, inputFormData);
             if(serverResponse.status == 200){
-                alert("Login Successfull.");
-                setCurrentUserData({...currentUserData, isAlreadyLogin: true});
+                alert("Login successfull.");
+                const data = serverResponse.data;
+                setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type});
                 setTimeout(()=>{
                     history.push("/");
-                }, 2000);
+                }, 400);
             } 
         } catch (error) {
             setCurrentUserData({...currentUserData, isAlreadyLogin: false});

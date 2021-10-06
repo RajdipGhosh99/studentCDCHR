@@ -3,15 +3,16 @@ const express = require('express');
 const router = express.Router();
 
 
-router.post("/signin", (req, res)=>{
-    const adminEmail = "admin@gmail.com";
-    const adminPassword = "admin";
-    const {email, password} = req.body;
-    if(adminEmail==email && adminPassword==password){
-        res.status(200).json("Login successfull.");
-    }else{
+router.post("/signin", async (req, res)=>{
+    try {
+        const {email, password} = req.body;
+        const dbResponse = await AdminModel.findOne({email, password});
+        console.log(dbResponse);
+        res.status(200).json(dbResponse);
+    } catch (error) {
         res.status(400).json("Invalid login creadential.");
     }
+   
 });
 
 router.put("/hr-request/add/", async (req, res)=> {

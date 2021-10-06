@@ -1,5 +1,8 @@
 import axios from 'axios';
 import {useState} from 'react';
+import {currentUserDataContext} from "../../App";
+import { useHistory } from 'react-router';
+import { useContext } from 'react';
 
 
 
@@ -8,6 +11,9 @@ const HrLogin = () => {
         email: "",
         password: ""
     });
+
+    const {currentUserData, setCurrentUserData}  = useContext(currentUserDataContext);
+    const history = useHistory();
 
     const inputFieldChange = (event) => {
        const fieldName = event.target.name;
@@ -25,8 +31,14 @@ const HrLogin = () => {
             const serverResponse = await axios.post(apiUrl, inputFormData);
             if(serverResponse.status == 200){
                 alert("Login Successfull.");
+                const data = serverResponse.data;
+                setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type});
+                setTimeout(()=>{
+                    history.push("/");
+                }, 400);
             } 
         } catch (error) {
+            setCurrentUserData({...currentUserData, isAlreadyLogin: false});
             alert(error.response.data);
         }
     }
