@@ -81,6 +81,7 @@ const studentSchema = new mongoose.Schema({
     },
     type: {
         type: String,
+        default: "student",
         required: true
     }
 });

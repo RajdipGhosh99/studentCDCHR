@@ -6,6 +6,7 @@ const adminSchema = new mongoose.Schema({
     },
     type: {
         type: String,
+        default: "admin",
         required: true
     }
 });

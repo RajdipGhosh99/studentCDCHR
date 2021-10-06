@@ -38,6 +38,7 @@ router.get("/search/company-name/:name", async  (req, res)=>{
 
 router.post("/signup", async (req, res)=>{
     const clientData = req.body;
+    console.log(clientData)
     try {
         if(!clientData.name || !clientData.companyName || !clientData.email || !clientData.password || !clientData.phoneNumber || !clientData.type){
             res.status(420).json("Please fill the input fields properly");

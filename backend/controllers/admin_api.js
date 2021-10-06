@@ -14,8 +14,8 @@ router.post("/signin", (req, res)=>{
     }
 });
 
-router.put("/hr-request/add/:hrid", async (req, res)=> {
-    const hrId = req.params.hrid;
+router.put("/hr-request/add/", async (req, res)=> {
+    const hrId = req.body.hrid;
     try {
         const dbResponse = await AdminModel.updateOne({$push: {hrRequests: hrId}});
         res.status(200).json("Data save successfully.")
