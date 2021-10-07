@@ -2,6 +2,7 @@ import AdminDashboardNav from "./AdminDashboardNav";
 import "../../css/AdminDashboard.css";
 import { useEffect, useState } from "react";
 import HrRequestCard from "./HrRequestCard";
+import axios from "axios";
 
 
 const AdminAllHRRequests = ()=>{
@@ -37,7 +38,7 @@ const AdminAllHRRequests = ()=>{
      </div>
      <div className="row mt-4 ">
      {
-        allStudentsData.map((hrRequest, index)=>{
+        allHrRequests.map((hrRequest, index)=>{
             return(
                 <div className="col-lg-3 col-md-3 col-sm-6 col-12 m-auto text-center mb-3" key={index}>
                   <HrRequestCard HrRequestData={allHrRequests} fetchDataFromServer={fetchDataFromServer} />

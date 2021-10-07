@@ -3,6 +3,20 @@ import "../../css/HrCard.css";
 import axios from "axios";
 
 const HrRequestCard = ({HrRequestData, fetchDataFromServer})=>{
+
+
+    const hrViewButton = () => {
+
+    }
+
+    const hrAcceptBtn = () => {
+        
+    }
+
+    const hrRejectBtn = () => {
+        
+    }
+
     return(
         <>
           <div className="card shadow" style={{ width: "18rem" }} >
@@ -19,13 +33,13 @@ const HrRequestCard = ({HrRequestData, fetchDataFromServer})=>{
            <p className="card-text hr_card_text"><b>Date: </b>07-10-2021 </p>
            <div className="d-flex justify-content-start align-content-center">
            <div>
-               <button href="#" className="btn btn-success">View</button>
+               <button href="#" className="btn btn-success" onClick={hrViewButton}>View</button>
              </div>
              <div>
-               <button href="#" className="btn btn-success">Accept</button>
+               <button href="#" className="btn btn-warning ml-2" onClick={hrAcceptBtn} >Accept</button>
              </div>
              <div>
-               <button href="#" className="btn btn-danger ml-3" onClick={hrCardDeleteBtn}>Reject</button>
+               <button href="#" className="btn btn-danger ml-3" onClick={hrRejectBtn}>Reject</button>
              </div>
            </div>
          </div>
