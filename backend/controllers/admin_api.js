@@ -6,13 +6,35 @@ const router = express.Router();
 router.post("/signin", async (req, res)=>{
     try {
         const {email, password} = req.body;
-        const dbResponse = await AdminModel.findOne({email, password});
-        console.log(dbResponse);
-        res.status(200).json(dbResponse);
+        console.log(email, password);
+        if(!email || !password){
+            res.status(420).json("Please fill input fields properly.");
+        }else{
+            const dbResponse = await AdminModel.findOne({email, password});
+            console.log(dbResponse);
+            if(dbResponse){
+                res.status(200).json(dbResponse);
+            }else{
+                throw new Error();
+            }
+        }
+      
     } catch (error) {
         res.status(400).json("Invalid login creadential.");
     }
    
+});
+
+router.post("/signup", async (req, res)=>{
+    const {email, password} = req.body;
+    try {
+        const admin = new AdminModel({email, password});
+        const dbResponse = await admin.save();
+        console.log(dbResponse);
+        res.status(201).json(dbResponse);
+    } catch (error) {
+        res.status(400).json("Admin registration failed, Error: "+error.message);
+    } 
 });
 
 router.put("/hr-request/add/", async (req, res)=> {

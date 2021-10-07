@@ -1,9 +1,12 @@
-
+import "../../css/AdminDashboard.css";
+ import AdminAllStudents from "./AdminAllStudents";
 
 const Admindashboard = () => {
     return(
         <>
-         <h1>Hello</h1>
+    <div className="admin_dashboard_root_div">
+     <AdminAllStudents />
+    </div>
         </>
     );
 }
