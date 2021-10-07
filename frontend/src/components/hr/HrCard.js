@@ -1,4 +1,4 @@
-import defaultUser from "../../images/default1.png";
+import defaultUser from "../../images/default_hr.png";
 import "../../css/HrCard.css";
 import axios from "axios";
 

@@ -12,13 +12,13 @@ const AdminAllHRRequests = ()=>{
     },[]);
 
     const fetchDataFromServer = async ()=>{
-        const apiUrl = `http://localhost:8000/hr/viewall`;
+        const apiUrl = `http://localhost:8000/admin/hr-request/all`;
         try {
             const serverResponse = await axios.get(apiUrl);
             console.log(serverResponse.data);
             setAllHrRequests(serverResponse.data);
         } catch (error) {
-            console.log(error.response.data);
+            console.log(error.message);
         }
     }
 
@@ -41,7 +41,7 @@ const AdminAllHRRequests = ()=>{
         allHrRequests.map((hrRequest, index)=>{
             return(
                 <div className="col-lg-3 col-md-3 col-sm-6 col-12 m-auto text-center mb-3" key={index}>
-                  <HrRequestCard HrRequestData={allHrRequests} fetchDataFromServer={fetchDataFromServer} />
+                  <HrRequestCard hrRequestId={hrRequest} fetchDataFromServer={fetchDataFromServer} />
                 </div>
             )
         })

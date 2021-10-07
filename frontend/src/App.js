@@ -3,6 +3,8 @@ import Login from "./components/student/Login"
 import SignUp from "./components/student/SignUp";
 import HrLogin from "./components/hr/HrLogin";
 import HrSignUp from "./components/hr/HrSignUp";
+import Contact from "./components/Contact";
+import About from "./components/About";
 import AdminLogin from "./components/admin/AdminLogin";
 import HrProfile from "./components/hr/HrProfile";
 import AdminDashboard from "./components/admin/AdminDashboard";
@@ -27,7 +29,8 @@ const App = () => {
     name: "",
     profile_pic: "default",
     skills: [],
-    type: ""
+    type: "",
+    isGranted: "false"
   });
 
   return (
@@ -36,6 +39,8 @@ const App = () => {
       <Navbar />
       <Switch>
       <Route exact path="/" component={Home} />
+      <Route exact path="/contact" component={Contact} />
+      <Route exact path="/about" component={About} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/hrlogin" component={HrLogin} />
         <Route exact path="/signup" component={SignUp} />

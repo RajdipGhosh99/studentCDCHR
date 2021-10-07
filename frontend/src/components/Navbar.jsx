@@ -5,14 +5,14 @@ import {currentUserDataContext} from "../App";
 const Navbar=()=>{
 
     const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
-    console.log(currentUserData.name)
+    // console.log(currentUserData.name)
 
 return(
     <>
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div className="container-fluid">
                 <img src="" alt="" />
-                <NavLink className="navbar-brand" to="/">Navbar</NavLink>
+                <NavLink className="navbar-brand" to="/" style={{fontWeight: "700"}}>Student-CDC-HR</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -22,10 +22,10 @@ return(
                             <NavLink className="nav-link active" aria-current="page" to="/">Home</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" to="/">Contact</NavLink>
+                            <NavLink className="nav-link active" aria-current="page" to="/contact">Contact</NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink className="nav-link active" aria-current="page" to="/">About</NavLink>
+                            <NavLink className="nav-link active" aria-current="page" to="/about">About</NavLink>
                         </li>
 
                         {
@@ -77,11 +77,7 @@ return(
                         <li className="nav-item">
                             <NavLink className="nav-link disabled text-black" aria-current="page" to="#" >{currentUserData.name} ({currentUserData.type})</NavLink>
                         </li> : null
-                    }
-                    
-
-                      
-                        
+                    }  
                     </ul>
                 </div>
             </div>

@@ -32,7 +32,7 @@ const HrLogin = () => {
             if(serverResponse.status == 200){
                 alert("Login Successfull.");
                 const data = serverResponse.data;
-                setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type});
+                setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type, isGranted: data.isGranted});
                 setTimeout(()=>{
                     history.push("/");
                 }, 400);

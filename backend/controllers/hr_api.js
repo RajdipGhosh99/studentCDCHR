@@ -6,7 +6,12 @@ const HRModel = require('../models/hr_model');
 router.get("/viewall", async (req, res)=>{
     try {
         const dbResponse = await HRModel.find({});
-        res.status(200).json(dbResponse);
+        if(dbResponse){
+            res.status(200).json(dbResponse);
+        }else{
+            throw new Error();
+        }
+        
     } catch (error) {
         res.status(400).json("Data not found, Error: "+error.message);
     }
@@ -17,7 +22,12 @@ router.get("/search/:hrid", async  (req, res)=>{
     try {
         const dbResponse = await HRModel.findById(hrId);
         console.log(dbResponse)
-        res.status(200).json(dbResponse);
+        if(dbResponse){
+            res.status(200).json(dbResponse);
+        }else{
+            throw new Error();
+        }
+        
     } catch (error) {
         res.status(400).json("Invalid HR id");
     }
@@ -90,6 +100,27 @@ router.put("/update/:hrid", async (req, res)=>{
         res.status(400).json("User not update. Invalid HR id");
     }
 });
+
+
+router.put("/isgranted/update/:hrid", async (req, res)=>{
+    const hrId = req.params.hrid;
+    const isGranted = req.body.isGranted;
+    console.log(hrId, isGranted);
+    try {
+        const dbResponse = await HRModel.findByIdAndUpdate(hrId, {isGranted}, {new: true});
+        console.log(dbResponse);
+        if(dbResponse){
+            res.status(200).json(dbResponse);
+        }else{
+            throw new Error();
+        }
+    } catch (error) {
+        res.status(400).json("User not update. Invalid HR id");
+        console.log(error.message)
+    }
+});
+
+
 
 router.put("/add-profile/:hrid", async (req, res)=>{
     const hrid = req.params.hrid; 

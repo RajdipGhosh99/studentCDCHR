@@ -37,6 +37,16 @@ router.post("/signup", async (req, res)=>{
     } 
 });
 
+
+router.get("/hr-request/all", async (req, res)=>{
+    try {
+        const dbResponse = await AdminModel.findOne({});
+        res.status(200).json(dbResponse.hrRequests);
+    } catch (error) {
+        res.status(404).json("Data not found");
+    }
+});
+
 router.put("/hr-request/add/", async (req, res)=> {
     const hrId = req.body.hrid;
     try {
