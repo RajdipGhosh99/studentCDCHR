@@ -30,12 +30,19 @@ const HrLogin = () => {
             const apiUrl = `http://localhost:8000/hr/signin`;
             const serverResponse = await axios.post(apiUrl, inputFormData);
             if(serverResponse.status == 200){
-                alert("Login Successfull.");
-                const data = serverResponse.data;
-                setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type, isGranted: data.isGranted});
-                setTimeout(()=>{
+                console.log(serverResponse);
+                if(serverResponse.data.isGranted == "pending"){
+                    alert("Admin not yet verify your profile, Please wait 1-2 days...");
+                }else if(serverResponse.data.isGranted == "false"){
+                    alert("Sorry, Admin reject your request");
+                }else{
+                    const data = serverResponse.data;
+                    setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type, isGranted: data.isGranted});
+                    setTimeout(()=>{
                     history.push("/");
                 }, 400);
+                }
+                
             } 
         } catch (error) {
             setCurrentUserData({...currentUserData, isAlreadyLogin: false});
