@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import {currentUserDataContext} from "../App";
+import PostAddIcon from '@material-ui/icons/PostAdd';
 
 const Navbar=()=>{
 
@@ -12,7 +13,7 @@ return(
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div className="container-fluid">
                 <img src="" alt="" />
-                <NavLink className="navbar-brand" to="/" style={{fontWeight: "700"}}>Student-CDC-HR</NavLink>
+                <NavLink className="navbar-brand" to="/" style={{fontWeight: "700", color: "#ee00aa"}}>Student-CDC-HR</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -78,6 +79,16 @@ return(
                             <NavLink className="nav-link disabled text-black" aria-current="page" to="#" >{currentUserData.name} ({currentUserData.type})</NavLink>
                         </li> : null
                     }  
+
+                    {
+                        currentUserData.type=="hr" && currentUserData.isGranted=="true" ? 
+                    <li>
+                        <NavLink className="nav-link active" aria-current="page" exact to="/hrsortlisted-profiles">
+                            <PostAddIcon style={{color: "green", marginTop: "-5px", cursor: "pointer" , fontSize: "30px", marginLeft: "30px"}}/>
+                        </NavLink>
+                        
+                    </li> : null  }
+
                     </ul>
                 </div>
             </div>

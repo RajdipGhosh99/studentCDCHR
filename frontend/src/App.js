@@ -17,6 +17,7 @@ import React,{useState} from 'react';
 import AdminAllStudents from "./components/admin/AdminAllStudents";
 import AdminAllHR from "./components/admin/AdminAllHR";
 import AdminAllHRRequests from "./components/admin/AdminHRRequests";
+import SortlistedProfiles from "./components/hr/SortListedProfiles";
 
 const currentUserDataContext = React.createContext();
 
@@ -52,7 +53,8 @@ const App = () => {
         <Route exact path="/admin/dashboard/all-students" component={AdminAllStudents} />
         <Route exact path="/admin/dashboard/all-hr" component={AdminAllHR} />
         <Route exact path="/admin/dashboard/hr-request" component={AdminAllHRRequests} />
-        <Route path ="/terms" component={Terms}/>
+        <Route exact path="/hrsortlisted-profiles" component={SortlistedProfiles} />
+        <Route exact path ="/terms" component={Terms}/>
         <Route path ="/logout" component={Logout}/>
       </Switch>
       </currentUserDataContext.Provider>
