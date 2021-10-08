@@ -1,8 +1,11 @@
 import { useState } from "react";
 import axios from 'axios';
+import { useHistory } from "react-router";
 
 
 const HrSignUp = () => {
+
+    const history = useHistory();
 
     const [inputFormData, setInputFormData] = useState({
         name: "",
@@ -30,7 +33,10 @@ const HrSignUp = () => {
             const serverResponse = await axios.post(apiUrl, inputFormData);
             if(serverResponse.status==201){
                 //HR request to Admin
-                hrRequestToAdmin(serverResponse.data._id);             
+                hrRequestToAdmin(serverResponse.data._id);   
+                setTimeout(()=>{
+                    history.push("/hrlogin");
+                }, 400);          
             }
         } catch (error) {
             alert("Registration failed, Error: "+error.response.data);

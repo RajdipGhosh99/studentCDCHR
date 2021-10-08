@@ -1,8 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import axios from 'axios';
+import { useHistory } from "react-router";
 
 const SignUp = ()=>{
+
+    const history = useHistory();
 
     const [inputFormData, setInputFormData] = useState({
         name: "",
@@ -31,6 +34,9 @@ const SignUp = ()=>{
             if(serverResponse.status==201){
                 alert("Registration successfull.");
                 setInputFormData({name: "", branch: "", course: "", email: "", password: "", phoneNumber: ""});
+                setTimeout(()=>{
+                    history.push("/login");
+                }, 400);
             }
         } catch (error) {
             console.log(error.response.data);
