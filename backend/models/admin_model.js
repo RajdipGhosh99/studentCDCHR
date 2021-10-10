@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const adminSchema = new mongoose.Schema({
     name: {
@@ -32,6 +33,18 @@ const adminSchema = new mongoose.Schema({
         type: String,
         default: "admin",
         required: true
+    }
+});
+
+adminSchema.pre("save", async function(req, res, next){
+    if(this.isModified("password")){
+        try {
+            const bcryptPassword = await bcrypt.hash(this.password, 12);
+            this.password = bcryptPassword;
+            next();
+        } catch (error) {
+            throw new Error("Server Error");
+        }
     }
 });
 

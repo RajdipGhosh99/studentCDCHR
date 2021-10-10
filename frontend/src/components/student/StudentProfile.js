@@ -30,7 +30,7 @@ const StudentProfile = () => {
     const fetchUserDataFromServer = async ()=>{
       const apiUrl = `http://localhost:8000/student/search/${currentUserData.userId}`;
       try {
-        const serverResponse = await axios.get(apiUrl);
+        const serverResponse = await axios.get(apiUrl, {withCredentials: true});
         if(serverResponse.status == 200){
           console.log(serverResponse);
           setCurrentUserData({...currentUserData, skills: serverResponse.data.skills});

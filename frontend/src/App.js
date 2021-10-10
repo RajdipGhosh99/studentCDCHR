@@ -13,11 +13,12 @@ import Home from "./components/home/Home";
 import { Switch, Route } from "react-router-dom";
 import Logout from "./components/Logout";
 import Terms from "./components/Terms";
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import AdminAllStudents from "./components/admin/AdminAllStudents";
 import AdminAllHR from "./components/admin/AdminAllHR";
 import AdminAllHRRequests from "./components/admin/AdminHRRequests";
 import SortlistedProfiles from "./components/hr/SortListedProfiles";
+import axios from 'axios';
 
 const currentUserDataContext = React.createContext();
 
@@ -29,10 +30,33 @@ const App = () => {
     isAlreadyLogin: false,
     name: "",
     profile_pic: "default",
-    skills: [],
     type: "",
     isGranted: "false"
   });
+
+
+  useEffect( async ()=>{
+    try {
+      const apiUrl = `http://localhost:8000/student/get-profile`;
+      const serverResponse = await axios.get(apiUrl, {withCredentials: true});
+      if(serverResponse.status == 200){
+        //Means user data get successfully
+        console.log("First user data home page...");
+        console.log(serverResponse);
+        const data = serverResponse.data;
+        setCurrentUserData({...currentUserData, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type, isAlreadyLogin: true});
+      }else{
+        throw new Error();
+      }
+    } catch (error) {
+      console.log(error.message);
+      setCurrentUserData({...currentUserData, isAlreadyLogin: false});
+    }
+  }, []);
+
+
+
+
 
   return (
     <>

@@ -16,7 +16,7 @@ const Login = () => {
         password: ""
     });
 
-    console.log(currentUserData)
+    // console.log(currentUserData)
 
     const inputFieldChange = (event) => {
        const fieldName = event.target.name;
@@ -31,7 +31,7 @@ const Login = () => {
         event.preventDefault();
         try {
             const apiUrl = `http://localhost:8000/student/signin`;
-            const serverResponse = await axios.post(apiUrl, inputFormData);
+            const serverResponse = await axios.post(apiUrl, inputFormData, {withCredentials: true});
             if(serverResponse.status == 200){
                 alert("Login successfull.");
                 const data = serverResponse.data;

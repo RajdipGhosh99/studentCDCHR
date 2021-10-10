@@ -28,7 +28,7 @@ const HrLogin = () => {
         event.preventDefault();
         try {
             const apiUrl = `http://localhost:8000/hr/signin`;
-            const serverResponse = await axios.post(apiUrl, inputFormData);
+            const serverResponse = await axios.post(apiUrl, inputFormData, {withCredentials: true});
             if(serverResponse.status == 200){
                 console.log(serverResponse);
                 if(serverResponse.data.isGranted == "pending"){

@@ -36,11 +36,11 @@ const AdminAllHRRequests = ()=>{
      </div>
       
      </div>
-     <div className="row mt-4 ">
+     <div className="row mt-4 container-fluid">
      {
         allHrRequests.map((hrRequest, index)=>{
             return(
-                <div className="col-lg-3 col-md-3 col-sm-6 col-12 m-auto text-center mb-3" key={index}>
+                <div className="col-lg-3 col-md-3 col-sm-6 col-12 m-auto text-center mb-3 d-flex justify-content-center" key={index}>
                   <HrRequestCard hrRequestId={hrRequest} fetchDataFromServer={fetchDataFromServer} />
                 </div>
             )

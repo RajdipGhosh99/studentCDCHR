@@ -30,6 +30,7 @@ const StudentCard = ({HrData, fetchDataFromServer})=>{
          <div className="card-body text-start">
            <h5 className="card-title hr_card_text"><b>Name: </b>{HrData.name}</h5>
            <p className="card-text hr_card_text"><b>Type: </b> {HrData.type}</p>
+           <p className="card-text hr_card_text"><b>isGranted: </b> {HrData.isGranted}</p>
            <p className="card-text hr_card_text"><b>Company Name: </b> {HrData.companyName}</p>
            <p className="card-text hr_card_text"><b>Phone Number: </b> {HrData.phoneNumber} </p>
            <div className="d-flex justify-content-start align-content-center">

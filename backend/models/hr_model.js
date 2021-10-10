@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 
 const hrSchema = new mongoose.Schema({
@@ -60,9 +62,41 @@ const hrSchema = new mongoose.Schema({
         type: String,
         default: "hr",
         required: true
+    },
+    jwtToken: {
+        type: String,
+        default: null
     }
-
 });
+
+
+hrSchema.pre("save", async function (req, res, next){
+    if(this.isModified("password")){
+        try {
+            const bycryptPassword = await bcrypt.hash(this.password, 12);
+            this.password = bycryptPassword;
+            next();
+        } catch (error) {
+            console.log(error.message)
+            throw new Error("Server Error");
+        }
+
+    }
+});
+
+
+hrSchema.methods.getJwtToken = async function(){
+    //Create jwt token
+    try {
+        const jwtToken = await jwt.sign({userId: this._id}, process.env.JWT_SECRET_KEY);
+        this.jwtToken = jwtToken;
+        await this.save();
+        return jwtToken;
+    } catch (error) {
+        console.log(error.message)
+        throw new Error();
+    }
+}
 
 const HRModel = mongoose.model("hr_model", hrSchema);
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const HRModel = require('../models/hr_model');
+const bcrypt = require('bcryptjs');
 
 
 router.get("/viewall", async (req, res)=>{
@@ -73,9 +74,22 @@ router.post("/signin", async (req, res)=>{
         res.status(420).json("Please fill input fields properly.");
     }else{
         try {
-            const dbResponse = await HRModel.findOne({email, password});
+            const dbResponse = await HRModel.findOne({email});
             if(dbResponse){
-                res.status(200).json(dbResponse);
+                const isPasswordMatched = await bcrypt.compare(password, dbResponse.password);
+                if(isPasswordMatched){
+                    //Means password is mached
+                    if(dbResponse.isGranted=="true"){
+                       //Set JWT Token
+                       const jwtToken = await dbResponse.getJwtToken();
+                       res.cookie("user_key", jwtToken, {expires: (new Date(Date.now() + 5184000000)), httpOnly: true});
+                       res.status(200).json(dbResponse);
+                    }else{
+                        res.status(200).json(dbResponse);
+                    }
+                }else{
+                    throw new Error();
+                }
             }else{
                 throw new Error();
             }

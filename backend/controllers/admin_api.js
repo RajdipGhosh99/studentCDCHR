@@ -1,19 +1,24 @@
 const AdminModel = require('../models/admin_model');
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 
 
 router.post("/signin", async (req, res)=>{
     try {
         const {email, password} = req.body;
-        console.log(email, password);
         if(!email || !password){
             res.status(420).json("Please fill input fields properly.");
         }else{
-            const dbResponse = await AdminModel.findOne({email, password});
-            console.log(dbResponse);
+            const dbResponse = await AdminModel.findOne({email});
             if(dbResponse){
-                res.status(200).json(dbResponse);
+                const isPasswordMatched = await bcrypt.compare(password, dbResponse.password);
+                if(isPasswordMatched){
+                    //Means password is mached
+                    res.status(200).json(dbResponse);
+                }else{
+                    throw new Error();
+                }
             }else{
                 throw new Error();
             }
@@ -30,7 +35,6 @@ router.post("/signup", async (req, res)=>{
     try {
         const admin = new AdminModel({email, password});
         const dbResponse = await admin.save();
-        console.log(dbResponse);
         res.status(201).json(dbResponse);
     } catch (error) {
         res.status(400).json("Admin registration failed, Error: "+error.message);

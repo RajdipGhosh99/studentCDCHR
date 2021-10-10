@@ -3,6 +3,8 @@ const HRModel = require("../models/hr_model");
 const router = express.Router();
 const StudentModel = require('../models/student_model');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const userAuth = require('../userauth/userAuth');
 
 
 
@@ -11,7 +13,6 @@ router.get("/viewall", async (req, res)=>{
     try {
         const dbResponse = await StudentModel.find({});
         res.status(200).json(dbResponse);
-        console.log(dbResponse);
     } catch (error) {
         res.status(400).json("Data not found. Error: "+error.message);
     }
@@ -22,10 +23,18 @@ router.get("/search/:sid", async (req, res)=> {
     const studentId = req.params.sid;
     try {
         const dbResponse = await StudentModel.findById(studentId);
-        console.log(dbResponse);
         res.status(200).json(dbResponse);
     } catch (error) {
         res.status(400).json("Invalid syudent Id");
+    }
+});
+
+
+router.get("/get-profile", userAuth, async (req, res)=> {
+    try {
+        res.status(200).json(req.userData);
+    } catch (error) {
+        res.status(400).json("Invalid student Id");
     }
 });
 
@@ -34,7 +43,6 @@ router.get("/search/branch/:name", async (req, res)=> {
     const studentBranch = req.params.name.toUpperCase();
     try {
         const dbResponse = await StudentModel.find({branch: studentBranch});
-        console.log(dbResponse);
         res.status(200).json(dbResponse);
     } catch (error) {
         res.status(400).json("Invalid branch");
@@ -47,7 +55,6 @@ router.get("/search/skills/:name", async (req, res)=> {
     const skills = req.params.name;
     try {
         const dbResponse = await StudentModel.find({skills: {$in: [skills]}});
-        console.log(dbResponse);
         res.status(200).json(dbResponse);
     } catch (error) {
         res.status(400).json("Not found, Error: "+error.message);
@@ -64,6 +71,7 @@ router.post("/signup", async (req, res)=>{
             try {
                 const newStudent = new StudentModel(clientData);
                 const dbResponse = await newStudent.save();
+                console.log(dbResponse);
                 res.status(201).json(dbResponse);
             } catch (error) {
                 res.status(400).json("User Registration failed. Error: "+error.message);
@@ -82,20 +90,30 @@ router.post("/signin", async (req, res)=>{
         res.status(420).json("Please fill input fields properly.");
     }else{
         try {
-            const dbResponse = await StudentModel.findOne({email, password});
+            const dbResponse = await StudentModel.findOne({email});
             if(dbResponse){
-                res.status(200).json(dbResponse);
+                const isPasswordMatched = await bcrypt.compare(password, dbResponse.password);
+                if(isPasswordMatched){
+                    //Means password is mached
+                    //Set JWT Token
+                    const jwtToken = await dbResponse.getJwtToken();
+                    res.cookie("user_key", jwtToken, {expires: (new Date(Date.now() + 5184000000)), httpOnly: true});
+                    res.status(200).json(dbResponse);
+                }else{
+                    throw new Error();
+                }
+               
             }else{
                 throw new Error();
             }
         } catch (error) {
-            res.status(400).json("Invalid login credential.");
+            res.status(400).json("Invalid login credential. "+error.message);
         }
     }
 });
 
 
-router.put("/update/:sid", async (req, res)=>{
+router.put("/update/:sid", userAuth, async (req, res)=>{
     const studentId = req.params.sid;
     const clientData = req.body;
     console.log(clientData);
@@ -108,7 +126,7 @@ router.put("/update/:sid", async (req, res)=>{
 });
 
 
-router.put("/skills/update/:sid", async (req, res)=>{
+router.put("/skills/update/:sid", userAuth, async (req, res)=>{
     const studentId = req.params.sid;
     const skill = req.body.skill;
     console.log();
@@ -133,6 +151,17 @@ router.delete("/delete/:sid", async (req, res)=>{
     } catch (error) {
         res.status(400).json("Invalid student Id.");
     }
+});
+
+
+router.get("/logout", userAuth, (req, res)=>{
+    try {
+        res.clearCookie("user_key");
+        res.status(200).json("User logout successfully."); 
+    } catch (error) {
+        res.status(400).json("Invalid user, Error: "+error.message);
+    }
+
 });
 
 

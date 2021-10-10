@@ -49,6 +49,7 @@ const HrSignUp = () => {
         try {
             const apiUrl = `http://localhost:8000/admin/hr-request/add`;
             const serverResponse = await axios.put(apiUrl, {hrid});
+            console.log("HR Request Id");
             console.log(serverResponse);
             alert("Registration successfull.");
             setInputFormData({name: "", companyName: "", email: "", password: "", phoneNumber: ""});
