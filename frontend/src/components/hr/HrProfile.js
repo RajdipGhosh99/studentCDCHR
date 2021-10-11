@@ -27,7 +27,7 @@ const HrProfile = () => {
     //Featch HR data from server
     const apiUrl = `http://localhost:8000/hr/search/${currentUserData.userId}`;
     try {
-      const serverResponse = await axios.get(apiUrl);
+      const serverResponse = await axios.get(apiUrl, {withCredentials: true});
       if(serverResponse.status == 200){
         console.log(serverResponse.data);
         setHrData(serverResponse.data);

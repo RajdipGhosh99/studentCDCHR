@@ -4,7 +4,7 @@ const router = express.Router();
 const StudentModel = require('../models/student_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const userAuth = require('../userauth/userAuth');
+const studentUserAuth = require('../userauth/studentUserAuth');
 
 
 
@@ -30,13 +30,15 @@ router.get("/search/:sid", async (req, res)=> {
 });
 
 
-router.get("/get-profile", userAuth, async (req, res)=> {
+router.get("/get-profile", studentUserAuth, async (req, res)=> {
     try {
         res.status(200).json(req.userData);
     } catch (error) {
         res.status(400).json("Invalid student Id");
     }
 });
+
+
 
 router.get("/search/branch/:name", async (req, res)=> {
     //Search user by branch name
@@ -98,6 +100,7 @@ router.post("/signin", async (req, res)=>{
                     //Set JWT Token
                     const jwtToken = await dbResponse.getJwtToken();
                     res.cookie("user_key", jwtToken, {expires: (new Date(Date.now() + 5184000000)), httpOnly: true});
+                    // res.cookie("user_type", "student", {expires: (new Date(Date.now() + 5184000000)), httpOnly: true});
                     res.status(200).json(dbResponse);
                 }else{
                     throw new Error();
@@ -113,7 +116,7 @@ router.post("/signin", async (req, res)=>{
 });
 
 
-router.put("/update/:sid", userAuth, async (req, res)=>{
+router.put("/update/:sid", studentUserAuth, async (req, res)=>{
     const studentId = req.params.sid;
     const clientData = req.body;
     console.log(clientData);
@@ -126,7 +129,7 @@ router.put("/update/:sid", userAuth, async (req, res)=>{
 });
 
 
-router.put("/skills/update/:sid", userAuth, async (req, res)=>{
+router.put("/skills/update/:sid", studentUserAuth, async (req, res)=>{
     const studentId = req.params.sid;
     const skill = req.body.skill;
     console.log();
@@ -154,9 +157,10 @@ router.delete("/delete/:sid", async (req, res)=>{
 });
 
 
-router.get("/logout", userAuth, (req, res)=>{
+router.get("/logout", studentUserAuth, (req, res)=>{
     try {
         res.clearCookie("user_key");
+        res.clearCookie("user_type");
         res.status(200).json("User logout successfully."); 
     } catch (error) {
         res.status(400).json("Invalid user, Error: "+error.message);

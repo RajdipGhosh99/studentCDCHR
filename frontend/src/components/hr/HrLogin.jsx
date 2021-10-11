@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
 import { useContext } from 'react';
+import Cookies from 'js-cookie';
 
 
 
@@ -37,6 +38,7 @@ const HrLogin = () => {
                     alert("Sorry, Admin reject your request");
                 }else{
                     const data = serverResponse.data;
+                    Cookies.set("user_type", "hr", {expires: 60});
                     setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type, isGranted: data.isGranted});
                     setTimeout(()=>{
                     history.push("/");

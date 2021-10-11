@@ -19,6 +19,7 @@ import AdminAllHR from "./components/admin/AdminAllHR";
 import AdminAllHRRequests from "./components/admin/AdminHRRequests";
 import SortlistedProfiles from "./components/hr/SortListedProfiles";
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const currentUserDataContext = React.createContext();
 
@@ -30,21 +31,37 @@ const App = () => {
     isAlreadyLogin: false,
     name: "",
     profile_pic: "default",
-    type: "",
+    type: Cookies.get("user_type") ?  Cookies.get("user_type") : "student",
     isGranted: "false"
   });
 
 
   useEffect( async ()=>{
     try {
-      const apiUrl = `http://localhost:8000/student/get-profile`;
+      let apiUrl="";
+      if(currentUserData.type == "student"){
+        //Fetch student data from server when app is load
+        console.log("hello home student is called");
+        console.log(currentUserData.type);
+        apiUrl = `http://localhost:8000/student/get-profile`;
+        // setCurrentUserData({...currentUserData, isGranted: "false"});
+      }else if(currentUserData.type == "hr"){
+        //Fetch HR data from server when app is load
+        console.log("hello home HR is called");
+        console.log(currentUserData.type);
+         apiUrl = `http://localhost:8000/hr/get-profile`;
+        //  setCurrentUserData({...currentUserData, isGranted: "true"});
+      }else{
+        //Fetch Admin data from server when app is load
+      }
       const serverResponse = await axios.get(apiUrl, {withCredentials: true});
       if(serverResponse.status == 200){
         //Means user data get successfully
         console.log("First user data home page...");
         console.log(serverResponse);
         const data = serverResponse.data;
-        setCurrentUserData({...currentUserData, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type, isAlreadyLogin: true});
+        console.log("app.js data fetchy from server.......");
+        setCurrentUserData({...currentUserData, userId: data._id, name: data.name, profile_pic: data.profile_pic, isGranted: data.type=="hr" ? "true" : "false", type: data.type, isAlreadyLogin: true});
       }else{
         throw new Error();
       }

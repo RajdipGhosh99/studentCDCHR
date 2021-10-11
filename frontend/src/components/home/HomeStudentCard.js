@@ -7,6 +7,8 @@ import { useContext } from "react";
 const HomeStudentCard = ({studentData})=>{
 
     const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
+    console.log("home card items");
+    console.log(currentUserData)
 
     const detailsButtonClick = async ()=>{
     }

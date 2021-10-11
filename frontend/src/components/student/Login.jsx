@@ -2,6 +2,7 @@ import axios from 'axios';
 import {useState, useContext} from 'react';
 import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
+import Cookies from 'js-cookie';
 
 
 
@@ -35,6 +36,8 @@ const Login = () => {
             if(serverResponse.status == 200){
                 alert("Login successfull.");
                 const data = serverResponse.data;
+                //set cookies in client side
+                Cookies.set("user_type", "student", {expires: 60});
                 setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type});
                 setTimeout(()=>{
                     history.push("/");

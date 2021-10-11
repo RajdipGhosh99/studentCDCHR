@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const HRModel = require('../models/hr_model');
 const bcrypt = require('bcryptjs');
+const hrUserAuth = require('../userauth/hrUserAuth');
 
 
 router.get("/viewall", async (req, res)=>{
@@ -33,6 +34,18 @@ router.get("/search/:hrid", async  (req, res)=>{
         res.status(400).json("Invalid HR id");
     }
 });
+
+
+
+router.get("/get-profile", hrUserAuth, async (req, res)=> {
+    try {
+        res.status(200).json(req.userData);
+    } catch (error) {
+        res.status(400).json("Invalid HR Id");
+    }
+});
+
+
 
 router.get("/search/company-name/:name", async  (req, res)=>{
     const companyName = req.params.name;
@@ -100,7 +113,7 @@ router.post("/signin", async (req, res)=>{
 });
 
 
-router.put("/update/:hrid", async (req, res)=>{
+router.put("/update/:hrid", hrUserAuth, async (req, res)=>{
     const hrId = req.params.hrid;
     const clientData = req.body;
     try {
@@ -116,7 +129,7 @@ router.put("/update/:hrid", async (req, res)=>{
 });
 
 
-router.put("/isgranted/update/:hrid", async (req, res)=>{
+router.put("/isgranted/update/:hrid", hrUserAuth, async (req, res)=>{
     const hrId = req.params.hrid;
     const isGranted = req.body.isGranted;
     console.log(hrId, isGranted);
@@ -136,7 +149,7 @@ router.put("/isgranted/update/:hrid", async (req, res)=>{
 
 
 
-router.put("/add-profile/:hrid", async (req, res)=>{
+router.put("/add-profile/:hrid", hrUserAuth, async (req, res)=>{
     const hrid = req.params.hrid; 
     const studentProfileId = req.body;
     try {
@@ -150,7 +163,7 @@ router.put("/add-profile/:hrid", async (req, res)=>{
 });
 
 
-router.delete("/delete/sortlisted-profile/:hrid", async (req, res)=>{
+router.delete("/delete/sortlisted-profile/:hrid", hrUserAuth, async (req, res)=>{
     const hrId = req.params.hrid;
     const studentProfileId = req.body.sid;
     console.log(hrId, studentProfileId)
@@ -170,7 +183,7 @@ router.delete("/delete/sortlisted-profile/:hrid", async (req, res)=>{
 });
 
 
-router.delete("/delete/:hrid", async (req, res)=>{
+router.delete("/delete/:hrid", hrUserAuth, async (req, res)=>{
     const hrId = req.params.hrid;
     try {
         const dbResponse = await HRModel.findByIdAndDelete(hrId);
@@ -184,6 +197,16 @@ router.delete("/delete/:hrid", async (req, res)=>{
     }
 });
 
+
+router.get("/logout", hrUserAuth, (req, res)=>{
+    try {
+        res.clearCookie("user_key");
+        res.clearCookie("user_type");
+        res.status(200).json("User logout successfully."); 
+    } catch (error) {
+        res.status(400).json("Invalid user, Error: "+error.message);
+    }
+});
 
 
 

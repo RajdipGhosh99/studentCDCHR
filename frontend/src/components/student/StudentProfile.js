@@ -11,6 +11,7 @@ import { useState, useEffect, useContext } from 'react';import profile_image_url
 import axios from 'axios';
 import {currentUserDataContext} from "../../App";
 import "../../css/StudentProfile.css";
+import Cookies from 'js-cookie';
 
 
 
@@ -24,6 +25,7 @@ const StudentProfile = () => {
 
 
     useEffect( async ()=>{
+
       fetchUserDataFromServer();
     }, []);
 

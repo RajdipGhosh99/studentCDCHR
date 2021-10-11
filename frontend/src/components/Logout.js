@@ -9,6 +9,7 @@ const Logout = ()=> {
     const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
     useEffect( async ()=>{
       if(currentUserData.type == "student"){
+        //when student click logout navbar option
         const apiUrl = `http://localhost:8000/student/logout`;
         const serverResponse = await axios.get(apiUrl, {withCredentials: true});
         if(serverResponse.status == 200){
@@ -17,8 +18,28 @@ const Logout = ()=> {
             history.push("/login");
           }, 200);
         }else{
-          alert("Logout not happend, Something went wrong.");
+          alert("Logout operation failed, Something went wrong.");
         }
+      }else if(currentUserData.type == "hr"){
+        //when HR click logout navbar option
+        try {
+          const apiUrl = `http://localhost:8000/hr/logout`;
+          const serverResponse = await axios.get(apiUrl, {withCredentials: true});
+          if(serverResponse.status == 200){
+            setCurrentUserData({...currentUserData, isAlreadyLogin: false});
+            setTimeout(()=>{
+              history.push("/hrlogin");
+            }, 200);
+          }else{
+            alert("Logout operation failed, Something went wrong.");
+          }
+        } catch (error) {
+          
+        }
+      }else if(currentUserData.type == "admin") {
+        //when HR click logout navbar option
+      }else{
+        alert("Some error happend in Logout component, Please check it...");
       }
     },[]);
 
