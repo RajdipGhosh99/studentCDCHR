@@ -113,18 +113,18 @@ router.post("/signin", async (req, res)=>{
 });
 
 
-router.put("/update/:hrid", hrUserAuth, async (req, res)=>{
-    const hrId = req.params.hrid;
-    const clientData = req.body;
+router.put("/update-profile", hrUserAuth, async (req, res)=>{
+    const hrId = req.userData._id;
+    const hrProfileData = req.body;
     try {
-        const dbResponse = await HRModel.findByIdAndUpdate(hrId, clientData, {new: true});
+        const dbResponse = await HRModel.findByIdAndUpdate(hrId, hrProfileData, {new: true});
         if(dbResponse){
             res.status(200).json(dbResponse);
         }else{
             throw new Error();
         }
     } catch (error) {
-        res.status(400).json("User not update. Invalid HR id");
+        res.status(401).json("You are not authorized to edit this profile.");
     }
 });
 
@@ -151,6 +151,7 @@ router.put("/isgranted/update/:hrid", hrUserAuth, async (req, res)=>{
 
 router.put("/add-profile/:hrid", hrUserAuth, async (req, res)=>{
     const hrid = req.params.hrid; 
+    const uid = req.userData._id;
     const studentProfileId = req.body;
     try {
         const dbResponse = await HRModel.findByIdAndUpdate(hrid, {$push: {sortlistedProfiles: studentProfileId}}, {new: true});

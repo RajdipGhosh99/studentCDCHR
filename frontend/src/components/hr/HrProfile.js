@@ -14,14 +14,24 @@ import {currentUserDataContext} from "../../App";
 import "../../css/HrProfile.css";
 
 
-
 const HrProfile = () => {
+  
 
   const {currentUserData, setCurrentUserData}  = useContext(currentUserDataContext);
   const [inputFieldsData, setInputFieldsData] = useState({
-    addSkill: ""
+    name: "",
+    email: "",
+    companyName: "",
+    phoneNumber: "",
+    profile_pic: ""
 });
-  const [hrData, setHrData] = useState({});
+  const [hrData, setHrData] = useState({
+    hrName: "",
+    hrEmail: "",
+    hrCompanyName: "",
+    hrPhoneNumber: "",
+    hrProfile_pic: ""
+  });
 
   const fetchHrDataFromServer = async () => {
     //Featch HR data from server
@@ -29,17 +39,18 @@ const HrProfile = () => {
     try {
       const serverResponse = await axios.get(apiUrl, {withCredentials: true});
       if(serverResponse.status == 200){
+        console.log("Hr profile fetch data...")
         console.log(serverResponse.data);
-        setHrData(serverResponse.data);
+        const data = serverResponse.data;
+        setHrData({...hrData, hrName: data.name, hrEmail: data.email, hrCompanyName: data.companyName, hrPhoneNumber: data.phoneNumber+"", hrProfile_pic: data.profile_pic});
+        setInputFieldsData({...inputFieldsData, name: data.name, email: data.email, companyName: data.companyName, phoneNumber: data.phoneNumber+"", profile_pic: data.profile_pic});
       }
     } catch (error) {
       console.log(error.message);
     }
   }
 
-  useState(()=>{
-    fetchHrDataFromServer();
-  }, []);
+
  
 
   const inputFieldChange = (event) => {
@@ -48,7 +59,55 @@ const HrProfile = () => {
     setInputFieldsData({...inputFieldsData, [fieldName]: fieldValue});
   }
 
-  const {addSkill} = inputFieldsData;
+  const {name, email, companyName, phoneNumber, profile_pic} = inputFieldsData;
+  const { hrName, hrEmail, hrCompanyName, hrPhoneNumber, hrProfile_pic} = hrData;
+
+
+  useState(()=>{
+    fetchHrDataFromServer();
+    console.log("Fetch data from server again ........")
+  }, []);
+
+  const inputValidation = ()=>{
+    //Check input fields validation
+    if(! name.trim() || !email.trim() || ! companyName.trim()  || ! phoneNumber.trim()){
+      alert("Please fill input fields properly.");
+      return false;
+    }else if(phoneNumber.trim().length != 10){
+      alert("Phone number must be of 10 digits.");
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+
+  const profileEditIconClick = ()=>{
+    setInputFieldsData({name: hrName, email: hrEmail, companyName: hrCompanyName, phoneNumber: hrPhoneNumber, profile_pic: hrProfile_pic});
+  }
+
+
+
+
+  const hrProfileUpdateBtnClick = async ()=>{
+
+    try {
+      if(inputValidation()){
+        //when validation is ok
+        const apiUrl = `http://localhost:8000/hr/update-profile`;
+        const serverResponse = await axios.put(apiUrl, inputFieldsData, {withCredentials: true});
+        console.log(serverResponse);
+        if(serverResponse.status == 200){
+          const model = document.getElementById("exampleModalCenter");
+          fetchHrDataFromServer();
+          alert("Profile updated successfully.");
+        }
+      }
+    } catch (error) {
+      alert(error.response.data);
+    }
+  }
+
 
     return(
       <>
@@ -64,11 +123,11 @@ const HrProfile = () => {
                 </Tooltip>
               </IconButton>
             </label>
-         <h2 className="myprofile_user_name mb-4" style={{color: "#ee00aa"}}>{hrData.name} <EditIcon className="edit_profile_icon" data-toggle="modal" data-target="#exampleModalCenter" /></h2>
-         <p style={{textAlign: "start"}}><b>Email Address: </b>{hrData.email}</p>
-         <p style={{textAlign: "start"}}><b>Company Name: </b>{hrData.companyName}</p>
-         <p style={{textAlign: "start"}}><b>Phone Number: </b>{hrData.phoneNumber}</p>
-         <p style={{textAlign: "start"}}><b>Granted by HR: </b>{hrData.isGranted}</p>
+         <h2 className="myprofile_user_name mb-4" style={{color: "#ee00aa"}}>{hrName} <EditIcon className="edit_profile_icon" onClick={profileEditIconClick} data-toggle="modal" data-target="#exampleModalCenter" /></h2>
+         <p style={{textAlign: "start"}}><b>Email Address: </b>{hrEmail}</p>
+         <p style={{textAlign: "start"}}><b>Company Name:  </b>{hrCompanyName}</p>
+         <p style={{textAlign: "start"}}><b>Phone Number: </b>{hrPhoneNumber}</p>
+
 
            {/* modal */}
         <div className="modal fade text-start" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -82,10 +141,11 @@ const HrProfile = () => {
            </div>
            <div className="modal-body">
            <div>
-             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>User Name</label>
+             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>User Name*</label>
              <TextField
-             name="addSkill"
-             value={currentUserData.name}
+             name="name"
+             value={name}
+             onChange={inputFieldChange}
               id="standard-full-width"
               style={{ margin: "8px"}}
               placeholder="Enter Skills"
@@ -97,11 +157,11 @@ const HrProfile = () => {
             </div>
 
             <div>
-             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Email Address</label>
+             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Email Address*</label>
              <TextField
-             onChange={inputFieldChange}
-             name="addSkill"
-             value={addSkill}
+             name="email"
+             disabled
+             value={email}
               id="standard-full-width"
               style={{ margin: "8px"}}
               placeholder="Enter Skills"
@@ -113,11 +173,11 @@ const HrProfile = () => {
             </div>
 
             <div>
-             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Company Name</label>
+             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Company Name*</label>
              <TextField
              onChange={inputFieldChange}
-             name="addSkill"
-             value={addSkill}
+             name="companyName"
+             value={companyName}
               id="standard-full-width"
               style={{ margin: "8px"}}
               placeholder="Enter Skills"
@@ -129,11 +189,11 @@ const HrProfile = () => {
             </div>
 
             <div>
-             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Phone Number</label>
+             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Phone Number*</label>
              <TextField
              onChange={inputFieldChange}
-             name="addSkill"
-             value={addSkill}
+             name="phoneNumber"
+             value={phoneNumber}
               id="standard-full-width"
               style={{ margin: "8px"}}
               placeholder="Enter Skills"
@@ -152,7 +212,7 @@ const HrProfile = () => {
            <button type="button" className="btn btn-secondary" data-dismiss="modal"  >Close</button>
            </div>
              <div>
-             <button type="button" className="btn btn-primary update_profile_button"  ><SaveIcon />Add</button>
+             <button type="button" className="btn btn-primary update_profile_button" onClick={hrProfileUpdateBtnClick} ><SaveIcon />Save</button>
              </div>
              <div>
              </div>

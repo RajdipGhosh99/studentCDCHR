@@ -129,8 +129,9 @@ router.put("/update/:sid", studentUserAuth, async (req, res)=>{
 });
 
 
-router.put("/skills/update/:sid", studentUserAuth, async (req, res)=>{
-    const studentId = req.params.sid;
+router.put("/skills/update", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
     const skill = req.body.skill;
     console.log();
     try {
@@ -140,6 +141,37 @@ router.put("/skills/update/:sid", studentUserAuth, async (req, res)=>{
         res.status(400).json("User not update. Invalid student id");
     }
 });
+
+
+router.put("/educations/update", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const education = req.body.education;
+    console.log();
+    try {
+        const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$push: {education: education}}, {new: true});
+        res.status(200).json(dbResponse);
+    } catch (error) {
+        res.status(400).json("User not update. Invalid student id");
+    }
+});
+
+
+
+router.put("/projects/update", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const project = req.body.project;
+    console.log();
+    try {
+        const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$push: {projects: project}}, {new: true});
+        res.status(200).json(dbResponse);
+    } catch (error) {
+        res.status(400).json("User not update. Invalid student id");
+    }
+});
+
+
 
 router.delete("/delete/:sid", async (req, res)=>{
     const studentId = req.params.sid;

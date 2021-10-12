@@ -13,7 +13,7 @@ const Logout = ()=> {
         const apiUrl = `http://localhost:8000/student/logout`;
         const serverResponse = await axios.get(apiUrl, {withCredentials: true});
         if(serverResponse.status == 200){
-          setCurrentUserData({...currentUserData, isAlreadyLogin: false});
+          setCurrentUserData({...currentUserData, isAlreadyLogin: false, isGranted: false, type: "student"});
           setTimeout(() => {
             history.push("/login");
           }, 200);
@@ -26,7 +26,7 @@ const Logout = ()=> {
           const apiUrl = `http://localhost:8000/hr/logout`;
           const serverResponse = await axios.get(apiUrl, {withCredentials: true});
           if(serverResponse.status == 200){
-            setCurrentUserData({...currentUserData, isAlreadyLogin: false});
+            setCurrentUserData({...currentUserData, isAlreadyLogin: false, isGranted: false, type: "student"});
             setTimeout(()=>{
               history.push("/hrlogin");
             }, 200);

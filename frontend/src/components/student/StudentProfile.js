@@ -12,6 +12,9 @@ import axios from 'axios';
 import {currentUserDataContext} from "../../App";
 import "../../css/StudentProfile.css";
 import Cookies from 'js-cookie';
+import SkillsComponent from './studentProfiles/SkillsComponent';
+import EducationComponent from './studentProfiles/EducationComponent';
+import ProjectsProfile from './studentProfiles/ProjectsProfile';
 
 
 
@@ -19,53 +22,60 @@ const StudentProfile = () => {
 
     const {currentUserData, setCurrentUserData}  = useContext(currentUserDataContext);
 
-    const [inputFieldsData, setInputFieldsData] = useState({
-        addSkill: ""
-    });
+    // const [inputFieldsData, setInputFieldsData] = useState({
+    //     addSkill: ""
+    // });
+
+    const [studentData, setStudentData] = useState({});
 
 
-    useEffect( async ()=>{
 
-      fetchUserDataFromServer();
-    }, []);
-
-    const fetchUserDataFromServer = async ()=>{
+    
+    const fetchStudentDataFromServer = async ()=>{
       const apiUrl = `http://localhost:8000/student/search/${currentUserData.userId}`;
       try {
-        const serverResponse = await axios.get(apiUrl, {withCredentials: true});
+        const serverResponse = await axios.get(apiUrl);
         if(serverResponse.status == 200){
-          console.log(serverResponse);
-          setCurrentUserData({...currentUserData, skills: serverResponse.data.skills});
+          console.log("Student profile..........");
+          console.log(serverResponse)
+          setStudentData(serverResponse.data);
         }
       } catch (error) {
-
+        console.log(error.response.data);
       }
     }
 
 
+    useEffect( async ()=>{
+
+      fetchStudentDataFromServer();
+    }, []);
 
 
-    const inputFieldChange = (event) => {
-        const fieldName = event.target.name;
-        const fieldValue = event.target.value;
-        setInputFieldsData({...inputFieldsData, [fieldName]: fieldValue});
 
-    }
 
-    const {addSkill} = inputFieldsData;
 
-    const addSkillClickButton = async () => {
-        const apiUrl = `http://localhost:8000/student/skills/update/${currentUserData.userId}`;
-        const data = {skill: addSkill};
-        try {
-            const serverResponse = await axios.put(apiUrl, data);
-            fetchUserDataFromServer();
-            setInputFieldsData({addSkill: ""});
-        } catch (error) {
-            alert("Skill not update "+error.response.data);
-        }
 
-    }
+
+    // const inputFieldChange = (event) => {
+    //     const fieldName = event.target.name;
+    //     const fieldValue = event.target.value;
+    //     setInputFieldsData({...inputFieldsData, [fieldName]: fieldValue});
+
+    // }
+
+
+    // const addSkillClickButton = async () => {
+    //     const apiUrl = `http://localhost:8000/student/skills/update/${currentUserData.userId}`;
+    //     try {
+    //         const serverResponse = await axios.put(apiUrl, data);
+    //         fetchStudentDataFromServer();
+    //         setInputFieldsData({addSkill: ""});
+    //     } catch (error) {
+    //         alert("Skill not update "+error.response.data);
+    //     }
+
+    // }
 
     return(
         <>
@@ -81,71 +91,18 @@ const StudentProfile = () => {
                   </Tooltip>
                 </IconButton>
               </label>
-           <h2 className="myprofile_user_name">{currentUserData.name}</h2>
+           <h2 className="myprofile_user_name">{studentData.name}</h2>
            
-           <p>Branch, Course</p>
+           <p>{studentData.branch}, {studentData.course}</p>
            <p style={{textAlign: "start"}}>
            <b>Carrier Objective: </b> <br/> A Career Objective or a Resume Objective is essentially a heading statement that describes your professional goals in two to three sentences. Employers looking to hire an employee for a position tend to seek candidates that are driven enough to understand what they want
            </p>
 
-           <p style={{textAlign: "start"}}><b>Skills <EditIcon className="edit_profile_icon"   data-toggle="modal" data-target="#exampleModalCenter" /></b> </p>
-           <div className="row mt-0">
-           {
-            currentUserData.skills.map((skill, index)=>{
-              return <div className="col-3 skill_div" key={index}>{skill}</div>
-            })
-           }
-            
-            </div>
+           <SkillsComponent  studentSkills = {studentData.skills ? studentData.skills : []} fetchStudentDataFromServer={fetchStudentDataFromServer} />
+           <EducationComponent studentEducations = {studentData.education ? studentData.education : []} fetchStudentDataFromServer={fetchStudentDataFromServer} />
+           <ProjectsProfile  studentProjects = {studentData.projects ? studentData.projects : []} fetchStudentDataFromServer={fetchStudentDataFromServer}  />
 
 
-             {/* modal */}
-          <div className="modal fade text-start" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-         <div className="modal-dialog modal-dialog-centered" role="document">
-           <div className="modal-content">
-             <div className="modal-header">
-               <h5 className="modal-title" id="exampleModalLongTitle">Edit Skills</h5>
-               <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
-                 <span aria-hidden="true">&times;</span>
-               </button>
-             </div>
-             <div className="modal-body">
-             <div>
-               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Add Skills</label>
-               <TextField
-               onChange={inputFieldChange}
-               name="addSkill"
-               value={addSkill}
-                id="standard-full-width"
-                style={{ margin: "8px"}}
-                placeholder="Enter Skills"
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                shrink: true,
-                }} />
-              </div>
-             </div>
-             <div className="modal-footer d-flex justify-content-start align-items-center">
-             <div>
-             <button type="button" className="btn btn-secondary" data-dismiss="modal"  >Close</button>
-             </div>
-               <div>
-               <button type="button" className="btn btn-primary update_profile_button" onClick={addSkillClickButton} ><SaveIcon />Add</button>
-               </div>
-               <div>
-               </div>
-               
-             </div>
-           </div>
-         </div>
-         </div>
-
-         {/* modal */}
-
-        {/* <Button variant="contained" color="secondary" className="update_profile_button"  data-toggle="modal" data-target="#exampleModalCenter"  startIcon={<EditIcon />} >
-         Edit Profile
-       </Button> */}
          </div>
         </section>
         </>
