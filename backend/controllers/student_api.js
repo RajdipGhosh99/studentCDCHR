@@ -261,10 +261,11 @@ router.put("/projects/delete", studentUserAuth, async (req, res)=>{
 });
 
 
-router.put("/work-experiences/update", studentUserAuth, async (req, res)=>{
+router.put("/work-experiences/add", studentUserAuth, async (req, res)=>{
     // const studentId = req.params.sid;
     const studentId = req.userData._id;
     const workExprience = req.body.workExprience;
+    workExprience._id = Date.now();
     try {
         const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$push: {workExprience: workExprience}}, {new: true});
         res.status(200).json(dbResponse);
@@ -275,10 +276,48 @@ router.put("/work-experiences/update", studentUserAuth, async (req, res)=>{
 
 
 
-router.put("/languages/update", studentUserAuth, async (req, res)=>{
+router.put("/work-experiences/update", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const workExprience = req.body.workExprience;
+    console.log(workExprience)
+    try {
+        const dbResponse = await StudentModel.findOneAndUpdate({_id: studentId, "workExprience._id": workExprience._id}, {$set: {"workExprience.$": workExprience}}, {new: true});
+        res.status(200).json(dbResponse);
+    } catch (error) {
+        res.status(400).json("User not update. Invalid student id");
+    }
+});
+
+
+
+router.put("/work-experiences/delete", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const workExprienceDetails = req.body.workExprienceDetails;
+    try {
+        const response = await StudentModel.findOne({_id: studentId, "workExprience._id": workExprienceDetails._id});
+        if(response){
+            //Means work experience data is present in database
+            const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$pull: {workExprience: workExprienceDetails}}, {new: true});
+            res.status(200).json(dbResponse);
+        }else{
+            res.status(400).json("Experience details not deleted.");
+        }
+       
+    } catch (error) {
+        console.log(error.message)
+        res.status(400).json("User not delete. Invalid student id");
+    }
+});
+
+
+
+router.put("/languages/add", studentUserAuth, async (req, res)=>{
     // const studentId = req.params.sid;
     const studentId = req.userData._id;
     const language = req.body.language;
+    language._id = Date.now();
     try {
         const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$push: {languages: language}}, {new: true});
         res.status(200).json(dbResponse);
@@ -288,8 +327,43 @@ router.put("/languages/update", studentUserAuth, async (req, res)=>{
 });
 
 
+router.put("/languages/update", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const language = req.body.language;
+    try {
+        const dbResponse = await StudentModel.findOneAndUpdate({_id: studentId, "languages._id": language._id}, {$set: {"languages.$": language}}, {new: true});
+        res.status(200).json(dbResponse);
+    } catch (error) {
+        res.status(400).json("User not update. Invalid student id");
+    }
+});
 
-router.put("/field-of-interest/update", studentUserAuth, async (req, res)=>{
+
+
+router.put("/languages/delete", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const languageDetails = req.body.languageDetails;
+    try {
+        const response = await StudentModel.findOne({_id: studentId, "languages._id": languageDetails._id});
+        if(response){
+            //Means education data is present in database
+            const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$pull: {languages: languageDetails}}, {new: true});
+            res.status(200).json(dbResponse);
+        }else{
+            res.status(400).json("Language not found.");
+        }
+       
+    } catch (error) {
+        console.log(error.message)
+        res.status(400).json("User not delete. Invalid student id");
+    }
+});
+
+
+
+router.put("/field-of-interest/add", studentUserAuth, async (req, res)=>{
     // const studentId = req.params.sid;
     const studentId = req.userData._id;
     const fieldOfInterest = req.body.fieldOfInterest;
@@ -302,10 +376,33 @@ router.put("/field-of-interest/update", studentUserAuth, async (req, res)=>{
 });
 
 
-router.put("/video-url/update", studentUserAuth, async (req, res)=>{
+
+router.put("/field-of-interest/delete", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const fieldsOfInterest = req.body.fieldsOfInterest;
+    try {
+        const response = await StudentModel.findOne({_id: studentId, fieldsOfInterest: {$in: [fieldsOfInterest]}});
+        if(response){
+            //If skill is present in skills array
+            const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$pull: {fieldsOfInterest: fieldsOfInterest}}, {new: true});
+            res.status(200).json(dbResponse);
+        }else{
+            //If skill is not present in skills array
+            res.status(400).json("Skill not found.");
+        }
+       
+    } catch (error) {
+        res.status(400).json("User not update. Invalid student id");
+    }
+});
+
+
+router.put("/video-url/add", studentUserAuth, async (req, res)=>{
     // const studentId = req.params.sid;
     const studentId = req.userData._id;
     const videoUrl = req.body.videoUrl;
+    videoUrl._id = Date.now();
     try {
         const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$push: {videoUrl: videoUrl}}, {new: true});
         res.status(200).json(dbResponse);
@@ -313,6 +410,29 @@ router.put("/video-url/update", studentUserAuth, async (req, res)=>{
         res.status(400).json("User not update. Invalid student id");
     }
 });
+
+
+
+router.put("/video-url/delete", studentUserAuth, async (req, res)=>{
+    // const studentId = req.params.sid;
+    const studentId = req.userData._id;
+    const videoDeatils = req.body.videoDeatils;
+    try {
+        const response = await StudentModel.findOne({_id: studentId, "videoUrl._id": videoDeatils._id});
+        if(response){
+            //Means education data is present in database
+            const dbResponse = await StudentModel.findByIdAndUpdate(studentId, {$pull: {videoUrl: videoDeatils}}, {new: true});
+            res.status(200).json(dbResponse);
+        }else{
+            res.status(400).json("Video not found.");
+        }
+       
+    } catch (error) {
+        console.log(error.message)
+        res.status(400).json("User not delete. Invalid student id");
+    }
+});
+
 
 
 router.delete("/delete/:sid", async (req, res)=>{

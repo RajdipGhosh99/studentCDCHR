@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
+import WorkExperienceCard from "../carditems/WorkExperienceCard";
 
 
 
@@ -38,12 +39,12 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
         alert("Please fill all the fields properly.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/work-experiences/update`;
+          const apiUrl = `http://localhost:8000/student/work-experiences/add`;
           const workExperienceData = {workExprience: workExperience};
           const serverResponse = await axios.put(apiUrl, workExperienceData, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Data added successfully.");
+            alert("Work experience added successfully.");
             setWorkExperience({
               jobTitle: "",
               companyName: "",
@@ -64,7 +65,17 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
-        <p style={{textAlign: "start"}}><b>Work Experiences<EditIcon className="edit_profile_icon"   data-toggle="modal" data-target="#exampleModalCenterworkexperience" /></b> </p>
+
+        <div className="row m-auto">
+          <div className="col-4">
+          <p style={{textAlign: "start", color: "#ee00aa", fontSize: "22px"}}><b>Work Experiences</b> </p>
+          </div>
+          <div className="col-4 text-start">
+            <button type="button" className="btn btn-primary fw-bold" data-toggle="modal" data-target="#exampleModalCenterworkexperience" style={{fontSize: "13px"}}>Add Experience</button>
+          </div>
+         </div>
+        <hr style={{marginTop: "-3px"}}/>
+
            <div className="row mt-0 text-start">
            {
             studentWorkExperience && studentWorkExperience.length==0 ? <p>No Work Experience</p> : null
@@ -74,21 +85,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
               
               studentWorkExperience.map((object, index)=>{
                 return(
-                  <>
-                   <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto" key={index}>
-                   <div class="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid orange"}}>
-                     <div class="card-header"  style={{backgroundColor: "orange", color: "white"}} >
-                     <h5>{object.jobTitle}</h5>
-                     </div>
-                     <div class="card-body">
-                       <p class="card-title"><b>Company Name: </b>{object.companyName}</p>
-                       <p class="card-title"><b>Work Description: </b>{object.workDesctription}</p>
-                       <p class="card-text"><b>Company Name: </b>{object.companyAddress}</p>
-                       <p class="card-text"><b>Duration: </b>From {object.startingDate} to {object.endingDate}</p>
-                     </div>
-                   </div>
-                   </div>
-                  </>
+                   <WorkExperienceCard workExperienceDetails={object} modelId={"MyId"+object._id} fetchStudentDataFromServer={fetchStudentDataFromServer} key={index} />
                 )
               })
             }

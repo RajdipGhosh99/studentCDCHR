@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
+import LanguageCard from "../carditems/LanguageCard";
 
 
 
@@ -32,7 +33,7 @@ const LanguageProfile = ({studentLanguages, fetchStudentDataFromServer})=>{
         alert("Please fill all input fields properly.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/languages/update`;
+          const apiUrl = `http://localhost:8000/student/languages/add`;
           const data = {language: newLanguage};
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
@@ -54,7 +55,17 @@ const LanguageProfile = ({studentLanguages, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
-        <p style={{textAlign: "start"}}><b>Languages<EditIcon className="edit_profile_icon"   data-toggle="modal" data-target="#exampleModalCenterlanguage" /></b> </p>
+
+        <div className="row m-auto">
+          <div className="col-4">
+            <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Languages</b></p>
+          </div>
+          <div className="col-4 text-start">
+            <button type="button" className="btn btn-primary fw-bold" data-toggle="modal" data-target="#exampleModalCenterlanguage" style={{fontSize: "13px"}}>Add Langage</button>
+          </div>
+         </div>
+
+        <hr style={{marginTop: "-6px"}}/>
            <div className="row mt-0 text-start">
              {
               studentLanguages && studentLanguages.length==0 ? <p>No language</p> : null
@@ -62,9 +73,7 @@ const LanguageProfile = ({studentLanguages, fetchStudentDataFromServer})=>{
              {
               studentLanguages.map((object, index)=>{
                 return(
-                  <div className="col-lg-2 col-md-2 col-sm-3 col-3" key={index}>
-                    <div style={{backgroundColor: "green", color: "white", borderRadius: "17px", padding: "10px 3px 1px 3px", textAlign: "center"}}><p>{object.language}</p></div>
-                  </div>
+                  <LanguageCard key={index} modelId={"exampleModalCenterlanguage"+object._id} languageDetails={object} fetchStudentDataFromServer={fetchStudentDataFromServer} />
                 )
               })
              }

@@ -222,10 +222,6 @@ const EducationCard = ({educationDetails, modelId, fetchStudentDataFromServer})=
            </div>
          </div>
          </div>
-
-
-        
-
         </div>
     );
 }

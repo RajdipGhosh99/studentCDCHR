@@ -9,7 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
 
 
-  const [project, setProject] = useState({
+  const [studentProject, setStudentProject] = useState({
        _id: projectDetails._id,
        projectName: projectDetails.projectName,
        description: projectDetails.description,
@@ -22,14 +22,24 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
       const inputFieldChange = (event)=>{
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
-        setProject({...project, [fieldName]: fieldValue});
+        setStudentProject({...studentProject, [fieldName]: fieldValue});
       }
 
       console.log("Project card items");
       console.log(projectDetails)
   
   
-      const {_id, projectName, description, projectUrl, startingDate, endingDate} = project;
+      const {_id, projectName, description, projectUrl, startingDate, endingDate} = studentProject;
+
+      const editIconBtnClick = ()=>{
+             setStudentProject({...studentProject,
+             _id: projectDetails._id,
+             projectName: projectDetails.projectName,
+             description: projectDetails.description,
+             projectUrl: projectDetails.projectUrl,
+             startingDate: projectDetails.startingDate,
+             endingDate: projectDetails.endingDate});
+      }
       
   
       const projectUpdateBtnClick = async ()=>{
@@ -38,7 +48,7 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
         }else{
           try {
             const apiUrl = `http://localhost:8000/student/projects/update`;
-            const projectData = {project: project};
+            const projectData = {project: studentProject};
             const serverResponse = await axios.put(apiUrl, projectData, {withCredentials: true});
             if(serverResponse.status == 200){
               fetchStudentDataFromServer();
@@ -52,14 +62,11 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
 
 
       const deleteBtnIconClick = async ()=>{
-        console.log("Project card delete button press");
-        alert("hello hello")
           const value = window.confirm("Are you sure to delete this project")
           if(value){
             try {
-              alert(project)
                 const apiUrl = `http://localhost:8000/student/projects/delete`;
-                const data = {projectDetails: project};
+                const data = {projectDetails: projectDetails};
                 const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
                 if(serverResponse.status == 200){
                   fetchStudentDataFromServer();
@@ -70,11 +77,6 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
             }
           }
         
-      }
-
-
-      const editIconBtnClick = ()=>{
-        // setProject({...project, projectName: projectDetails.projectName, description: projectDetails.description, projectUrl: projectDetails.projectUrl, startingDate: projectDetails.startingDate, endingDate: projectDetails.endingDate});
       }
 
 

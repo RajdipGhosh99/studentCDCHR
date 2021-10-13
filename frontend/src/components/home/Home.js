@@ -5,7 +5,9 @@ import HomeStudentCard from "./HomeStudentCard";
 const Home = ()=>{
 
     const [allStudentsData, setAllStudentsData] = useState([]);
-    console.log("Home page")
+    //This will be a temporary array for filling orginial data
+    const [tempAllStudentData, setTempAllStudentData] = useState([]);
+    const [studentSearchField, setStudentSearchField] = useState("");
 
     const fetchAllStudentsFromServer = async ()=>{
         const apiUrl = `http://localhost:8000/student/viewall`;
@@ -14,6 +16,7 @@ const Home = ()=>{
             if(serverResponse.status == 200){
                 console.log(serverResponse.data);
                 setAllStudentsData(serverResponse.data);
+                setTempAllStudentData(serverResponse.data);
             }
         } catch (error) {
             console.log(error.message);
@@ -24,13 +27,31 @@ const Home = ()=>{
         fetchAllStudentsFromServer();
     }, []);
 
+
+    const inputFieldChange = (event)=>{
+        const fieldValue = event.target.value;
+        setStudentSearchField(fieldValue);
+       
+    }
+
+   
+
+    const searchFormSubmit = (event)=>{
+        event.preventDefault();
+        let newArray = allStudentsData.filter((studentData, index)=>{
+            return studentSearchField == studentData.name
+        });
+        setAllStudentsData(newArray);
+
+    }
+
     return(
         <>
     <div className="home_root_div">
      <div className="d-flex justify-content-center" style={{marginTop: "80px"}}>
      <div>
-        <form class="form-inline my-2 my-lg-0">
-         <input class="form-control mr-sm-2" type="search" placeholder="Search Student..." aria-label="Search" />
+        <form class="form-inline my-2 my-lg-0" onSubmit={searchFormSubmit}>
+         <input class="form-control mr-sm-2" type="search" placeholder="Search Student..." aria-label="Search" onChange={inputFieldChange} name="studentSearchField" value={studentSearchField} />
          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
        </form>
      </div>

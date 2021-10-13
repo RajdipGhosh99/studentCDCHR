@@ -2,7 +2,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import {useState } from 'react';
 import EducationCard from '../carditems/EducationCard';
 
 

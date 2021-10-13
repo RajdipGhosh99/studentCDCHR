@@ -1,6 +1,7 @@
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -26,7 +27,7 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
         alert("Please fill all input fields properly.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/field-of-interest/update`;
+          const apiUrl = `http://localhost:8000/student/field-of-interest/add`;
           const data = {fieldOfInterest: fieldOfInterest};
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
@@ -45,16 +46,48 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
     return(
         <>
         <div>
-        <p style={{textAlign: "start"}}><b>Field of Interests<EditIcon className="edit_profile_icon"   data-toggle="modal" data-target="#exampleModalCenterfieldofinterest" /></b> </p>
+
+        <div className="row m-auto">
+          <div className="col-4">
+            <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Field of Interests</b></p>
+          </div>
+          <div className="col-4 text-start">
+            <button type="button" className="btn btn-primary fw-bold" data-toggle="modal" data-target="#exampleModalCenterfieldofinterest" style={{fontSize: "13px"}}>Add Interest</button>
+          </div>
+         </div>
+
+        <hr style={{marginTop: "-6px"}}/>
+
            <div className="row mt-0 text-start">
              {
               studentFieldOfInterest && studentFieldOfInterest.length==0 ? <p>Add your interests</p> : null
              } 
              {
-              studentFieldOfInterest.map((object, index)=>{
+              studentFieldOfInterest.map((fieldsOfInterest, index)=>{
+
+                const videoDeleteIconClick = async ()=>{
+                   const value = window.confirm("Are you sure to delete this information.");
+                   if(value){
+                   try {
+                       const apiUrl = `http://localhost:8000/student/field-of-interest/delete`;
+                       const data = {fieldsOfInterest: fieldsOfInterest};
+                       const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
+                       if(serverResponse.status == 200){
+                           fetchStudentDataFromServer();
+                           alert("Data deleted successfully.");
+                       }
+                   } catch (error) {
+                       alert("Data not deleted. Error: "+error.response.data);
+                   }
+                   }
+                 }
+
                 return(
-                  <div className="col-lg-2 col-md-2 col-sm-3 col-3" key={index}>
-                    <div style={{backgroundColor: "green", color: "white", borderRadius: "17px", padding: "10px 3px 1px 3px", textAlign: "center"}}><p>{object.language}</p></div>
+                  <div className="col-12 card shadow p-2 my-1 d-flex justify-content-between flex-row"  key={index}>
+                    <div><p style={{fontWeight: "600", marginTop: "8px"}}>{fieldsOfInterest}</p></div>
+                    <div>
+                      <DeleteIcon style={{color: "#eb0273", cursor: "pointer"}} onClick={videoDeleteIconClick} />
+                    </div>
                   </div>
                 )
               })
@@ -65,7 +98,7 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
          <div className="modal-dialog modal-dialog-centered" role="document">
            <div className="modal-content">
              <div className="modal-header">
-               <h5 className="modal-title" id="exampleModalLongTitle">Languages</h5>
+               <h5 className="modal-title" id="exampleModalLongTitle">Field of Interest</h5>
                <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
                  <span aria-hidden="true">&times;</span>
                </button>

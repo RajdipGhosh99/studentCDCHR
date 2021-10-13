@@ -79,7 +79,7 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
               studentProjects.map((projectDetails, index)=>{
                 return(
                   <>
-                    <ProjectCard key={index} projectDetails={projectDetails} modelId={"exampleModalCenterprojects"+index} fetchStudentDataFromServer={fetchStudentDataFromServer}  />
+                    <ProjectCard key={index} projectDetails={projectDetails} modelId={"exampleModalCenterprojects"+projectDetails._id} fetchStudentDataFromServer={fetchStudentDataFromServer}  />
                   </>
                 )
               })
