@@ -5,20 +5,27 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 
 const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
 
     const {currentUserData, setCurrentUserData} = currentUserDataContext;
+    //useState for skill add
     const [newSkill, setNewSkill] = useState("");
-    console.log("skilllllls");
-    console.log(studentSkills);
+    //useState for skill delete
+    const [skillName, setSkillName] = useState("");
 
 
     const inputFieldChange = (event)=>{
       const fieldValue = event.target.value;
       setNewSkill(fieldValue);
+    }
+
+    const inputDeleteSkillFieldChange = (event)=>{
+      const fieldValue = event.target.value;
+      setSkillName(fieldValue);
     }
 
 
@@ -43,12 +50,45 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
     }
 
 
+    const skillDeleteBtnClick = async ()=>{
+      if(!skillName.trim()){
+        alert("Please fill input field properly.");
+      }else{
+        try {
+          const apiUrl = `http://localhost:8000/student/skills/delete`;
+          const data = {skill: skillName};
+          const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
+          if(serverResponse.status == 200){
+            fetchStudentDataFromServer();
+            alert("Skill deleted successfully.");
+            setSkillName("");
+          }
+        } catch (error) {
+          alert(error.response.data);
+        }
+      }
+    }
+
+
 
     return(
         <>
         <div>
-        <p style={{textAlign: "start"}}><b>Skills <EditIcon className="edit_profile_icon"   data-toggle="modal" data-target="#exampleModalCenter" /></b> </p>
-           <div className="row mt-0 text-start">
+         <div className="row m-auto">
+          <div className="col-4">
+            <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Skills</b></p>
+          </div>
+          <div className="col-4 text-start">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style={{fontSize: "13px"}}>Add Skill</button>
+          </div>
+          <div className="col-4 text-start">
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenterdeleteskill" style={{fontSize: "13px"}}>Delete Skill</button>
+          </div>
+         </div>
+
+        <hr style={{marginTop: "-4px"}}/>
+        
+           <div className="row mb-0 text-start">
              {
               studentSkills && studentSkills.length==0 ? <p>No skills found</p> : null
              } 
@@ -56,18 +96,20 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
               studentSkills.map((skill, index)=>{
                 return(
                   <div className="col-lg-2 col-md-2 col-sm-3 col-3" key={index}>
-                    <div style={{backgroundColor: "green", color: "white", borderRadius: "17px", padding: "10px 3px 1px 3px", textAlign: "center"}}><p>{skill}</p></div>
+                  <button type="button" class="btn btn-success my-1" style={{fontSize: "15px"}}>{skill}</button>
+
+                    {/* <div style={{backgroundColor: "green", color: "white", borderRadius: "17px", padding: "10px 3px 1px 3px", textAlign: "center"}}><p></p></div> */}
                   </div>
                 )
               })
              }
             </div>
-             {/* modal */}
+             {/* add modal */}
           <div className="modal fade text-start" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
          <div className="modal-dialog modal-dialog-centered" role="document">
            <div className="modal-content">
              <div className="modal-header">
-               <h5 className="modal-title" id="exampleModalLongTitle">Edit Skills</h5>
+               <h5 className="modal-title" id="exampleModalLongTitle">Add Skills</h5>
                <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
                  <span aria-hidden="true">&times;</span>
                </button>
@@ -98,11 +140,56 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
                </div>
                <div>
                </div>
-               
              </div>
            </div>
          </div>
          </div>
+
+
+        {/* Delete modal */}
+        <div className="modal fade text-start" id="exampleModalCenterdeleteskill" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+         <div className="modal-dialog modal-dialog-centered" role="document">
+           <div className="modal-content">
+             <div className="modal-header">
+               <h5 className="modal-title" id="exampleModalLongTitle">Delete Skill</h5>
+               <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div className="modal-body">
+             <div>
+               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Skill Name*</label>
+               <TextField
+               name="skillName"
+               value={skillName}
+               onChange={inputDeleteSkillFieldChange}
+                id="standard-full-width"
+                style={{ margin: "8px"}}
+                placeholder="Enter skill name"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                shrink: true,
+                }} />
+              </div>
+             </div>
+             <div className="modal-footer d-flex justify-content-start align-items-center">
+             <div>
+             <button type="button" className="btn btn-secondary" data-dismiss="modal"  >Close</button>
+             </div>
+               <div>
+               <button type="button" className="btn btn-danger" onClick={skillDeleteBtnClick} ><DeleteIcon style={{fontSize: "16px !important"}} />Delete</button>
+               </div>
+               <div>
+               </div>
+             </div>
+           </div>
+         </div>
+         </div>
+
+
+
+
         </div>
         </>
     );

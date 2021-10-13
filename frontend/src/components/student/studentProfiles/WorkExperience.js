@@ -5,18 +5,18 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
-import ProjectCard from "../carditems/ProjectCard";
 
 
 
-const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
+const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
 
 
     const {currentUserData, setCurrentUserData} = currentUserDataContext;
-    const [project, setProject] = useState({
-      projectName: "",
-      description: "",
-      projectUrl: "",
+    const [workExperience, setWorkExperience] = useState({
+      jobTitle: "",
+      companyName: "",
+      workDesctription: "",
+      companyAddress: "",
       startingDate: "",
       endingDate: ""
     });
@@ -25,29 +25,30 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
     const inputFieldChange = (event)=>{
       const fieldName = event.target.name;
       const fieldValue = event.target.value;
-      setProject({...project, [fieldName]: fieldValue});
+      setWorkExperience({...workExperience, [fieldName]: fieldValue})
     }
 
 
-    const {projectName, description, projectUrl, startingDate, endingDate} = project;
+    const {jobTitle, companyName, workDesctription, companyAddress, startingDate, endingDate} = workExperience;
 
 
 
-    const projectAddBtnClick = async ()=>{
-      if(!projectName.trim() || !description.trim() || !startingDate.trim() || !endingDate.trim()){
+    const workExperienceAddBtnClick = async ()=>{
+      if(!jobTitle.trim() || !companyName.trim() || !workDesctription.trim() || !companyAddress.trim() || !startingDate.trim() || !endingDate.trim()){
         alert("Please fill all the fields properly.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/projects/add`;
-          const projectData = {project: project};
-          const serverResponse = await axios.put(apiUrl, projectData, {withCredentials: true});
+          const apiUrl = `http://localhost:8000/student/work-experiences/update`;
+          const workExperienceData = {workExprience: workExperience};
+          const serverResponse = await axios.put(apiUrl, workExperienceData, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Project added successfully.");
-            setProject({
-              projectName: "",
-              description: "",
-              projectUrl: "",
+            alert("Data added successfully.");
+            setWorkExperience({
+              jobTitle: "",
+              companyName: "",
+              workDesctription: "",
+              companyAddress: "",
               startingDate: "",
               endingDate: ""
             });
@@ -63,44 +64,51 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
-
-        <div className="row m-auto">
-          <div className="col-4">
-            <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Projects</b></p>
-          </div>
-          <div className="col-4 text-start">
-            <button type="button" className="btn btn-primary fw-bold" data-toggle="modal" data-target="#exampleModalCenterprojects" style={{fontSize: "13px"}}>Add Project</button>
-          </div>
-         </div>
-
-        <hr style={{marginTop: "-6px"}}/>
+        <p style={{textAlign: "start"}}><b>Work Experiences<EditIcon className="edit_profile_icon"   data-toggle="modal" data-target="#exampleModalCenterworkexperience" /></b> </p>
            <div className="row mt-0 text-start">
+           {
+            studentWorkExperience && studentWorkExperience.length==0 ? <p>No Work Experience</p> : null
+           }
+
             {
-              studentProjects.map((projectDetails, index)=>{
+              
+              studentWorkExperience.map((object, index)=>{
                 return(
                   <>
-                    <ProjectCard key={index} projectDetails={projectDetails} modelId={"exampleModalCenterprojects"+index} fetchStudentDataFromServer={fetchStudentDataFromServer}  />
+                   <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto" key={index}>
+                   <div class="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid orange"}}>
+                     <div class="card-header"  style={{backgroundColor: "orange", color: "white"}} >
+                     <h5>{object.jobTitle}</h5>
+                     </div>
+                     <div class="card-body">
+                       <p class="card-title"><b>Company Name: </b>{object.companyName}</p>
+                       <p class="card-title"><b>Work Description: </b>{object.workDesctription}</p>
+                       <p class="card-text"><b>Company Name: </b>{object.companyAddress}</p>
+                       <p class="card-text"><b>Duration: </b>From {object.startingDate} to {object.endingDate}</p>
+                     </div>
+                   </div>
+                   </div>
                   </>
                 )
               })
             }
             </div>
              {/* modal */}
-          <div className="modal fade text-start" id="exampleModalCenterprojects" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div className="modal fade text-start" id="exampleModalCenterworkexperience" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
          <div className="modal-dialog modal-dialog-centered" role="document">
            <div className="modal-content">
              <div className="modal-header">
-               <h5 className="modal-title" id="exampleModalLongTitle">Projects</h5>
+               <h5 className="modal-title" id="exampleModalLongTitle">Work Experiences</h5>
                <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
                  <span aria-hidden="true">&times;</span>
                </button>
              </div>
              <div className="modal-body">
              <div>
-               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Project Name*</label>
+               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Job Title*</label>
                <TextField
-               name="projectName"
-               value={projectName}
+               name="jobTitle"
+               value={jobTitle}
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
@@ -113,10 +121,10 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
               </div>
 
               <div>
-               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Project Description*</label>
+               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Company Name*</label>
                <TextField
-               name="description"
-               value={description}
+               name="companyName"
+               value={companyName}
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
@@ -129,14 +137,31 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
               </div>
 
               <div>
-               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Project Url</label>
+               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Work Description*</label>
                <TextField
-               name="projectUrl"
-               value={projectUrl}
+               name="workDesctription"
+               value={workDesctription}
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
                 placeholder="Enter url"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                shrink: true,
+                }} />
+              </div>
+
+
+              <div>
+               <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Company Address*</label>
+               <TextField
+               name="companyAddress"
+               value={companyAddress}
+               onChange={inputFieldChange}
+                id="standard-full-width"
+                style={{ margin: "8px"}}
+                placeholder="Project starting date"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
@@ -161,6 +186,7 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
                 }} />
               </div>
 
+
               <div>
                <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Ending Date*</label>
                <TextField
@@ -183,7 +209,7 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
              <button type="button" className="btn btn-secondary" data-dismiss="modal"  >Close</button>
              </div>
                <div>
-               <button type="button" className="btn btn-primary update_profile_button" onClick={projectAddBtnClick} ><SaveIcon />Save</button>
+               <button type="button" className="btn btn-primary update_profile_button" onClick={workExperienceAddBtnClick} ><SaveIcon />Save</button>
                </div>
                <div>
                </div>
@@ -198,4 +224,4 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
 }
 
 
-export default ProjectsProfile;
+export default WorkExperience;

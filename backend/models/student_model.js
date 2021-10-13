@@ -49,13 +49,18 @@ const studentSchema = new mongoose.Schema({
             }
         }
     },
-    address: {},
-    githubLink: {
-        type: String
+    address: {
+        type: String,
+        default: "none"
+    },
+    linkedinLink: {
+        type: String,
+        default: "none"
     },
 
     carrierObjective: {
-        type: String
+        type: String,
+        default: "none"
     },
     education: {
         type: [{}]

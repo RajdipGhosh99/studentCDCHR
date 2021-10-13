@@ -1,91 +1,105 @@
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
+import {useState } from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import EducationCard from '../carditems/EducationCard';
+import SaveIcon from '@material-ui/icons/Save';
 
 
+const EducationCard = ({educationDetails, modelId, fetchStudentDataFromServer})=>{
 
-const EducationComponent = ({studentEducations, fetchStudentDataFromServer})=>{
-
-
-    const [education, setEducation] = useState({
-      collegeName: "",
-      degree: "",
-      spealization: "",
-      marks: "",
-      startingDate: "",
-      endingDate: ""
-    });
-
-
-    const inputFieldChange = (event)=>{
-      const fieldName = event.target.name;
-      const fieldValue = event.target.value;
-      setEducation({...education, [fieldName]: fieldValue});
-    }
-
-
-    const {collegeName, degree, spealization, marks, startingDate, endingDate, dateTime} = education;
-
-
-
-    const educationAddBtnClick = async ()=>{
-      if(!collegeName.trim() || !degree.trim() || !spealization.trim() || !startingDate.trim() || !endingDate.trim()){
-        alert("Write skill name in input field.");
-      }else{
-        try {
-          const apiUrl = `http://localhost:8000/student/educations/add`;
-          const educationData = {education: education};
-          const serverResponse = await axios.put(apiUrl, educationData, {withCredentials: true});
-          if(serverResponse.status == 200){
-            fetchStudentDataFromServer();
-            alert("Education added successfully.");
-            setEducation({
-              collegeName: "",
-              degree: "",
-              spealization: "",
-              marks: "",
-              startingDate: "",
-              endingDate: ""
-            });
+    const [myEducation, setmyEducation] = useState({
+        _id: educationDetails._id,
+        collegeName: educationDetails.collegeName,
+        degree: educationDetails.degree,
+        spealization: educationDetails.spealization,
+        marks: educationDetails.marks,
+        startingDate: educationDetails.startingDate,
+        endingDate: educationDetails.endingDate
+      });
+  
+  
+      const inputFieldChange = (event)=>{
+        const fieldName = event.target.name;
+        const fieldValue = event.target.value;
+        setmyEducation({...myEducation, [fieldName]: fieldValue});
+      }
+  
+  
+      const {_id, collegeName, degree, spealization, marks, startingDate, endingDate} = myEducation;
+      
+  
+      const educationUpdateBtnClick = async ()=>{
+        if(!collegeName.trim() || !degree.trim() || !spealization.trim() || !startingDate.trim() || !endingDate.trim()){
+          alert("Please fill input fields properly.");
+        }else{
+          try {
+            const apiUrl = `http://localhost:8000/student/educations/update`;
+            const educationData = {education: myEducation};
+            const serverResponse = await axios.put(apiUrl, educationData, {withCredentials: true});
+            if(serverResponse.status == 200){
+              fetchStudentDataFromServer();
+              alert("Education updated successfully.");
+            }
+          } catch (error) {
+            alert(error.response.data);
           }
-        } catch (error) {
-          alert(error.response.data);
         }
       }
-    }
+
+
+      const deleteBtnIconClick = async ()=>{
+          const value = window.confirm("Are you sure to delete this information")
+          if(value){
+            try {
+                const apiUrl = `http://localhost:8000/student/educations/delete`;
+                const data = {educationDetails: educationDetails};
+                const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
+                if(serverResponse.status == 200){
+                  fetchStudentDataFromServer();
+                  alert("Education deleted successfully.");
+                }
+            } catch (error) {
+                alert(error.response.data);
+            }
+          }
+        
+      }
+
 
 
 
     return(
-        <>
         <div>
-
-        <div className="row m-auto">
-          <div className="col-4">
-            <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Educations</b></p>
+        <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
+        <div className="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid #009431"}}>
+          <div className="card-header d-flex justify-content-between"  style={{backgroundColor: "#009431", color: "white"}} >
+          <div>
+           <h5>{educationDetails.collegeName}</h5>
           </div>
-          <div className="col-4 text-start">
-            <button type="button" className="btn btn-primary fw-bold" data-toggle="modal" data-target="#exampleModalCentereducation" style={{fontSize: "13px"}}>Add Education</button>
+          
+          <div className="d-flex justify-content-center">
+           <div className="mx-3">
+               <EditIcon style={{cursor: "pointer"}} data-toggle="modal" data-target={"#"+modelId} />
+           </div>
+           <div>
+               <DeleteIcon style={{cursor: "pointer"}} onClick={deleteBtnIconClick}  />
+           </div>
           </div>
-         </div>
+          </div>
+          <div class="card-body">
+            <p class="card-title"><b>Degree: </b>{educationDetails.degree}</p>
+            <p class="card-title"><b>Spelization: </b>{educationDetails.spealization}</p>
+            <p class="card-title"><b>Marks: </b>{educationDetails.marks}%</p>
+            <p class="card-text"><b>Duration: </b>{educationDetails.startingDate}-{educationDetails.endingDate}</p>
+          </div>
+        </div>
+        </div>
 
-        <hr style={{marginTop: "-6px"}}/>
-           <div className="row mt-0 text-start">
-            {
-              studentEducations.map((educationDetails, index)=>{
-                return(
-                  <EducationCard key={index} modelId={"exampleModalCentereducation"+index} educationDetails={educationDetails} fetchStudentDataFromServer={fetchStudentDataFromServer} />
-                )
-              })
-            }
-            </div>
 
-            
-             {/* modal */}
-          <div className="modal fade text-start" id="exampleModalCentereducation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        
+           {/* modal */}
+           <div className="modal fade text-start" id={modelId} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
          <div className="modal-dialog modal-dialog-centered" role="document">
            <div className="modal-content">
              <div className="modal-header">
@@ -199,7 +213,7 @@ const EducationComponent = ({studentEducations, fetchStudentDataFromServer})=>{
              <button type="button" className="btn btn-secondary" data-dismiss="modal"  >Close</button>
              </div>
                <div>
-               <button type="button" className="btn btn-primary update_profile_button" onClick={educationAddBtnClick} ><SaveIcon />Save</button>
+               <button type="button" className="btn btn-primary update_profile_button" onClick={educationUpdateBtnClick} ><SaveIcon />Save</button>
                </div>
                <div>
                </div>
@@ -208,10 +222,12 @@ const EducationComponent = ({studentEducations, fetchStudentDataFromServer})=>{
            </div>
          </div>
          </div>
+
+
+        
+
         </div>
-        </>
     );
 }
 
-
-export default EducationComponent;
+export default EducationCard;

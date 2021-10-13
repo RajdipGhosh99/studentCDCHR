@@ -114,3 +114,8 @@
   color: #645959 !important;
   cursor: pointer;
 }
+
+.hr_line {
+  height: 5px !important;
+  color: #07de40;
+}
