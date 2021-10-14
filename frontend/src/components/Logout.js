@@ -38,6 +38,11 @@ const Logout = ()=> {
         }
       }else if(currentUserData.type == "admin") {
         //when HR click logout navbar option
+        setCurrentUserData({...currentUserData, isAlreadyLogin: false, isGranted: false, type: "student", userId: ""});
+        setTimeout(()=>{
+          history.push("/admin-login");
+        }, 200);
+
       }else{
         alert("Some error happend in Logout component, Please check it...");
       }

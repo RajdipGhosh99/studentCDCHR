@@ -98,7 +98,7 @@ const StudentProfile = () => {
     return(
         <>
         <section className="myprofile_root_div d-flex justify-content-center">
-        <div className="text-center bg-light header_div_style p-4">
+        <div className="text-center shadow header_div_style p-4">
            <img src={profile_image_url} alt="" className="myprofile_profile_pic" />
           
            <input accept="image/*" id="icon-button-file" type="file"  style={{display: "none"}} name="profile_image" />

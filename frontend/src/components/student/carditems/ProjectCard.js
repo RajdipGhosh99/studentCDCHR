@@ -84,8 +84,8 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
     return(
         <div>
          <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
-         <div class="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid #63008a"}}>
-           <div class="card-header d-flex justify-content-between"  style={{backgroundColor: "#63008a", color: "white"}} >
+         <div class="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid #e00476"}}>
+           <div class="card-header d-flex justify-content-between"  style={{backgroundColor: "#e00476", color: "white"}} >
            <div>
              <h5>{projectDetails.projectName}</h5>
           </div>

@@ -1,10 +1,10 @@
 import defaultUser from "../../images/default1.png";
 import "../../css/StudentCard.css";
 import axios from "axios";
+import StudentCVCard from "../student/StudentCVCard";
+
 
 const StudentCard = ({studentData, fetchDataFromServer})=>{
-    console.log("Student Card")
-    console.log(studentData)
 
     const studentCardDeleteBtn = async ()=>{
        const value = window.confirm("Are you sure to delete this user?");
@@ -15,7 +15,6 @@ const StudentCard = ({studentData, fetchDataFromServer})=>{
             fetchDataFromServer();
             
         } catch (error) {
-            console.log(error.response.data);
             alert(error.response.data);
         }                
        }
@@ -33,10 +32,17 @@ const StudentCard = ({studentData, fetchDataFromServer})=>{
            <h5 className="card-title hr_card_text">{studentData.name}</h5>
            <p className="card-text hr_card_text"><b>Type: </b>{studentData.type} </p>
            <p className="card-text hr_card_text">{studentData.course} in {studentData.branch}</p>
-           <p className="card-text hr_card_text" style={{marginTop: "16px"}}><b>Skills:</b> C, Java, Python </p>
+           <p className="card-text hr_card_text" style={{marginTop: "16px"}}><b>Skills:</b> 
+           <span>
+            {
+              studentData.skills ? studentData.skills.map((skill, index)=>{
+                return skill + ", "
+              }) : "No skill"
+            }
+           </span> </p>
            <div className="d-flex justify-content-start align-content-center">
              <div>
-               <button href="#" className="btn btn-success">Details</button>
+               <button href="#" className="btn btn-success" data-bs-toggle="modal" data-bs-target={"#exampleModalstudenthrprofilecard"+studentData._id} >Details</button>
              </div>
              <div>
                <button href="#" className="btn btn-danger ml-3" onClick={studentCardDeleteBtn}>Delete</button>
@@ -44,6 +50,7 @@ const StudentCard = ({studentData, fetchDataFromServer})=>{
            </div>
          </div>
          </div>
+         <StudentCVCard studentData={studentData} modalId={"exampleModalstudenthrprofilecard"+studentData._id}  />
         </>
     );
 }

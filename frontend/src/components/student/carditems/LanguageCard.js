@@ -69,8 +69,8 @@ const LanguageCard = ({languageDetails, modelId, fetchStudentDataFromServer})=>{
     return(
         <div>
         <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
-        <div className="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid blue"}}>
-          <div className="card-header d-flex justify-content-between"  style={{backgroundColor: "blue", color: "white"}} >
+        <div className="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid #05a875"}}>
+          <div className="card-header d-flex justify-content-between"  style={{backgroundColor: "#05a875", color: "white"}} >
           <div>
            <h5>{languageDetails.language}</h5>
           </div>

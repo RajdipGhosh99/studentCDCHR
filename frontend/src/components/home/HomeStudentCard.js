@@ -47,17 +47,17 @@ const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHr
 
     return(
         <>
-           <div className="card shadow" style={{ width: "18rem", height: "24rem"}} >
+           <div className="card shadow" style={{ width: "18rem", height: "23rem"}} >
            <div className="text-center p-2">
            <img className="card-img-top img-fluid student_card_image" src={defaultUser}  alt="Card image cap" />
            </div>
            <hr/>
          
          <div className="card-body text-start">
-           <h5 className="card-title hr_card_text"><b>Name: </b>{studentData.name} {currentUserData.userId==studentData._id? <span style={{color: "#ee00aa"}}> (your Profile)</span> : null}</h5>
+           <h5 className="card-text hr_card_text"><b>Name: </b>{studentData.name} {currentUserData.userId==studentData._id? <span style={{color: "#ee00aa"}}> (your Profile)</span> : null}</h5>
            {/* <p className="card-text hr_card_text"><b>Type: </b>{studentData.type} </p> */}
            <p className="card-text hr_card_text"><b>Qualification: </b>{studentData.course} in {studentData.branch}</p>
-           <p className="card-text hr_card_text" style={{marginTop: "-15px"}}><b>Skills: </b>
+           <p className="card-text hr_card_text" style={{marginTop: "-150px !important"}}><b>Skills: </b>
              {
                studentData.skills.map((skill, index)=>{
                  return(
@@ -66,9 +66,11 @@ const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHr
               })
              }
            </p>
-           <div className="d-flex justify-content-start align-content-center">
+          
+         </div>
+         <div className="d-flex justify-content-start align-content-center pl-3 pb-3">
              <div>
-               <button className="btn btn-success" data-bs-toggle="modal" data-bs-target={"#"+modalId} onClick={detailsButtonClick}>Details</button>
+               <button className="btn btn-success home_details_button" data-bs-toggle="modal" data-bs-target={"#"+modalId} onClick={detailsButtonClick}>Details</button>
              </div>
              <div>
              {
@@ -77,7 +79,6 @@ const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHr
                
              </div>
            </div>
-         </div>
          </div>
 
          <StudentCVCard studentData={studentData} modalId={modalId}  />

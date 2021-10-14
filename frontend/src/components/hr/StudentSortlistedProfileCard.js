@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import defaultUser from "../../images/default1.png";
+import StudentCVCard from "../student/StudentCVCard";
 
 
 
@@ -16,7 +17,7 @@ const StudentSortlistedProfileCard = ({studentId})=>{
                 setStudentProfileData(serverResponse.data);
             }
         } catch (error) {
-            console.log(error.response.data);
+            // console.log(error.response.data);
         }
     }
 
@@ -25,12 +26,12 @@ const StudentSortlistedProfileCard = ({studentId})=>{
     }, []);
 
 
-    const btnClick = ()=>{
-        alert(studentProfileData.skills)
-    }
-
     return(
         <>
+        {
+          //studentProfileData value is not null i.e. not false then do this. Otherwise return null value
+          studentProfileData ? 
+          <>
         <div className="col-lg-3 col-md-3 col-sm-6 col-12 m-auto text-center mb-3 d-flex justify-content-center" >
         <div className="card shadow" style={{ width: "18rem", height: "24rem"}} >
            <div className="text-center p-2">
@@ -57,7 +58,7 @@ const StudentSortlistedProfileCard = ({studentId})=>{
 
            <div className="d-flex justify-content-start align-content-center">
              <div>
-               <button className="btn btn-success" data-bs-toggle="modal" data-bs-target="gvgfygjyg" onClick={btnClick} >Details</button>
+               <button className="btn btn-success" data-bs-toggle="modal" data-bs-target={"#exampleModalstudenthrsortlistedprofilecard"+studentProfileData._id} >Details</button>
              </div>
              <div>    
              </div>
@@ -65,6 +66,9 @@ const StudentSortlistedProfileCard = ({studentId})=>{
          </div>
          </div>
         </div>
+        <StudentCVCard studentData={studentProfileData} modalId={"exampleModalstudenthrsortlistedprofilecard"+studentProfileData._id}  />
+        </> : null
+      }
         </>
     );
 }

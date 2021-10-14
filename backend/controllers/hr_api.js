@@ -182,7 +182,7 @@ router.delete("/delete/sortlisted-profile/:hrid", hrUserAuth, async (req, res)=>
 });
 
 
-router.delete("/delete/:hrid", hrUserAuth, async (req, res)=>{
+router.delete("/delete/:hrid", async (req, res)=>{
     const hrId = req.params.hrid;
     try {
         const dbResponse = await HRModel.findByIdAndDelete(hrId);
@@ -195,6 +195,7 @@ router.delete("/delete/:hrid", hrUserAuth, async (req, res)=>{
         res.status(400).json("Invalid HR id.");
     }
 });
+
 
 
 router.get("/logout", hrUserAuth, (req, res)=>{
