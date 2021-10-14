@@ -12,7 +12,8 @@ const userAuth = async (req, res, next)=>{
                 _id: dbResponse._id,
                 name: dbResponse.name,
                 profile_pic: dbResponse.profile_pic,
-                type: dbResponse.type
+                type: dbResponse.type,
+                sortlistedProfiles: dbResponse.sortlistedProfiles
             }
             next();
         }else{

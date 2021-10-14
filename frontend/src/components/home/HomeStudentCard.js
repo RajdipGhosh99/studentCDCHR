@@ -4,12 +4,21 @@ import axios from "axios";
 import {currentUserDataContext} from "../../App";
 import { useContext } from "react";
 import { useEffect, useState } from "react";
+import StudentCVCard from "../student/StudentCVCard";
 
-const HomeStudentCard = ({studentData, modalId, hrProfileData})=>{
-  console.log("Student home card..........");
-  console.log(hrProfileData);
+const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHrProfileDataFromServer})=>{
 
     const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
+    const [isThisStudentProfileAlreadySelectedByHr, setIsThisStudentProfileAlreadySelectedByHr] = useState(false);
+    useEffect(()=>{
+      if(hrSortlistedProfileData){
+        hrSortlistedProfileData.map((studentId, index)=>{
+          if(studentId == studentData._id){
+            setIsThisStudentProfileAlreadySelectedByHr(true);
+          }
+        });
+      }
+    });
     
 
     const detailsButtonClick = async ()=>{
@@ -25,7 +34,8 @@ const HomeStudentCard = ({studentData, modalId, hrProfileData})=>{
           }
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
-            alert("Profile added successfully.");
+            fetchHrProfileDataFromServer();
+            // alert("Profile added successfully.");
           }
         }else{
           alert("You are not authorized to add student profile.");
@@ -58,11 +68,11 @@ const HomeStudentCard = ({studentData, modalId, hrProfileData})=>{
            </p>
            <div className="d-flex justify-content-start align-content-center">
              <div>
-               <button href="#" className="btn btn-success" data-bs-toggle="modal" data-bs-target={"#"+modalId} onClick={detailsButtonClick}>Details</button>
+               <button className="btn btn-success" data-bs-toggle="modal" data-bs-target={"#"+modalId} onClick={detailsButtonClick}>Details</button>
              </div>
              <div>
              {
-                currentUserData.isGranted=="true" && currentUserData.type=="hr" ? <button href="#" className="btn btn-danger ml-3" onClick={addProfileButtonClick}>Add Profile</button> : null
+                currentUserData.isGranted=="true" && currentUserData.type=="hr" ? isThisStudentProfileAlreadySelectedByHr ? <button className="btn btn-primary ml-3 disabled">Selected</button> : <button className="btn btn-danger ml-3" onClick={addProfileButtonClick}>Add Profile</button> : null
              }
                
              </div>
@@ -70,29 +80,8 @@ const HomeStudentCard = ({studentData, modalId, hrProfileData})=>{
          </div>
          </div>
 
-
-{/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button> */}
-
-           {/* <!--Student details Modal --> */}
-             <div className="modal fade" id={modalId} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-               <div className="modal-dialog">
-                 <div className="modal-content">
-                   <div className="modal-header">
-                     <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                   </div>
-                   <div className="modal-body">
-                     <p>{studentData.name}</p>
-                   </div>
-                   <div className="modal-footer">
-                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                     <button type="button" className="btn btn-primary">Save changes</button>
-                   </div>
-                 </div>
-               </div>
-             </div>
+         <StudentCVCard studentData={studentData} modalId={modalId}  />
+          
 
         </>
     );

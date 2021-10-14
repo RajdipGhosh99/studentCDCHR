@@ -1,12 +1,32 @@
 import axios from 'axios';
 import { useHistory } from "react-router";
 import { useEffect, useState } from 'react';
+import {currentUserDataContext} from "../../App";
+import { useContext } from 'react';
+import StudentSortlistedProfileCard from './StudentSortlistedProfileCard';
 
 const SortlistedProfiles = ()=>{
+
+    const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
+    const [hrSortlistedProfileData, setHrSortlistedProfileData] = useState([]);
+
     const history = useHistory();
 
+    const fetchHrProfileDataFromServer = async ()=>{
+        //Fetch hr profile data from server
+        try {
+            const apiUrl = `http://localhost:8000/hr/get-profile`;
+            const serverResponse = await axios.get(apiUrl, {withCredentials: true});
+            if(serverResponse.status == 200){
+                setHrSortlistedProfileData(serverResponse.data.sortlistedProfiles);
+            }
+        } catch (error) {
+          setHrSortlistedProfileData([]);
+        }
+    }
+
     useEffect(()=>{
-        
+        fetchHrProfileDataFromServer();
     }, []);
 
 
@@ -20,12 +40,21 @@ const SortlistedProfiles = ()=>{
         <div style={{marginTop: "70px"}}>
           <h2 className="text-center" style={{color: "#02b56a"}}>Sortlisted Profiles</h2>
           <hr className="" />
-          <div className="text-center mt-5">
-          <h3 className="text-danger">Student profiles not found.</h3>
-           <button className="btn btn-success mt-3" onClick={homeButtonClick}>Home</button>
-          </div>
-          
-          <div className="container-fluid row">
+          {
+            hrSortlistedProfileData.length==0 ? 
+            <div className="text-center mt-5">
+            <h3 className="text-danger">Student profiles not found.</h3>
+            <button className="btn btn-success mt-3" onClick={homeButtonClick}>Home</button>
+            </div> : null
+          }
+        <div className="container-fluid row">
+        {
+            hrSortlistedProfileData.map((studentId, index)=>{
+                return(
+                    <StudentSortlistedProfileCard studentId={studentId} key={index} />
+                )
+            })
+        }
         </div>
         </div>
         </div>

@@ -6,15 +6,10 @@ import {currentUserDataContext} from "../../App";
 
 const Home = ()=>{
     const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
-    // console.log("Home current user data")
-    // if(currentUserData.isGranted=="true"){
-    //     console.log(currentUserData.isGranted)
-    // }
-   
     const [allStudentsData, setAllStudentsData] = useState([]);
     //This will be a temporary array for filling orginial data
     //This is important when hr is logined in. In other cases like student or admin logined in this is not necessary.
-    const [hrProfileData, setHrProfiledata] = useState({});
+    const [hrSortlistedProfileData, setHrSortlistedProfileData] = useState([]);
     //To perform searching poeration
     const [studentSearchField, setStudentSearchField] = useState("");
 
@@ -23,8 +18,6 @@ const Home = ()=>{
         try {
             const serverResponse = await axios.get(apiUrl);
             if(serverResponse.status == 200){
-                console.log("Student Profile Data. honme...")
-                console.log(serverResponse.data);
                 setAllStudentsData(serverResponse.data);
             }
         } catch (error) {
@@ -32,29 +25,25 @@ const Home = ()=>{
         }
     }
 
-    useEffect(()=>{
-        fetchAllStudentsFromServer();
-    }, []);
+
 
     const fetchHrProfileDataFromServer = async ()=>{
         //Fetch HR profile data
-        if(currentUserData.type=="hr" && currentUserData.isGranted=="true"){
-        //   Fetch hr profile from server
+        //Fetch hr profile from server
           try {
               const apiUrl = `http://localhost:8000/hr/get-profile`;
               const serverResponse = await axios.get(apiUrl, {withCredentials: true});
               if(serverResponse.status == 200){
-                  console.log("HR profile data honme")
-                //   setHrProfiledata(serverResponse.data);
+                  console.log(serverResponse)
+                  setHrSortlistedProfileData(serverResponse.data.sortlistedProfiles);
               }
           } catch (error) {
-              console.log(error.message);
+            setHrSortlistedProfileData([]);
           }
-      }
-  }
+    }
 
-
-    useEffect( ()=>{
+    useEffect(()=>{
+        fetchAllStudentsFromServer();
         fetchHrProfileDataFromServer();
     }, []);
 
@@ -64,6 +53,7 @@ const Home = ()=>{
 
     const refreshButtonClick = ()=>{
         fetchAllStudentsFromServer();
+        fetchHrProfileDataFromServer();
     }
 
     const inputFieldChange = (event)=>{
@@ -115,7 +105,7 @@ const Home = ()=>{
         allStudentsData.map((student, index)=>{
             return(
                 <div className="col-lg-3 col-md-3 col-sm-6 col-12 m-auto text-center mb-3 d-flex justify-content-center" key={index}>
-                  <HomeStudentCard studentData={student} modalId={"exampleModalstudenthomecard"+student._id} hrProfileData={hrProfileData} />
+                  <HomeStudentCard studentData={student} modalId={"exampleModalstudenthomecard"+student._id} hrSortlistedProfileData={hrSortlistedProfileData} fetchHrProfileDataFromServer={fetchHrProfileDataFromServer} />
                 </div>
             )
         })

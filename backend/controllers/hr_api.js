@@ -129,7 +129,7 @@ router.put("/update-profile", hrUserAuth, async (req, res)=>{
 });
 
 
-router.put("/isgranted/update/:hrid", hrUserAuth, async (req, res)=>{
+router.put("/isgranted/update/:hrid", async (req, res)=>{
     const hrId = req.params.hrid;
     const isGranted = req.body.isGranted;
     console.log(hrId, isGranted);
