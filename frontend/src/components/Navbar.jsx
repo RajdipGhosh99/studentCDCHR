@@ -84,7 +84,7 @@ return(
                         currentUserData.type=="hr" && currentUserData.isGranted=="true" ? 
                     <li>
                         <NavLink className="nav-link active" aria-current="page" exact to="/hrsortlisted-profiles">
-                            <PostAddIcon style={{color: "green", marginTop: "-5px", cursor: "pointer" , fontSize: "30px", marginLeft: "30px"}}/>
+                        <PostAddIcon style={{color: "green", marginTop: "-5px", cursor: "pointer" , fontSize: "30px", marginLeft: "30px"}}/>Sortlisted Profiles
                         </NavLink>
                         
                     </li> : null  }

@@ -39,15 +39,33 @@ router.get("/get-profile", studentUserAuth, async (req, res)=> {
 });
 
 
+router.get("/search/value/:data", async (req, res)=> {
+    //Search user by Id
+    const data = req.params.data.trim();
+    try {
+        let dbResponse = "";
+        if(data != "all_documents"){
+        dbResponse = await StudentModel.find({$or: [{name:{'$regex' : data, '$options' : 'i'}}, {branch:{'$regex' : data, '$options' : 'i'}}, {course:{'$regex' : data, '$options' : 'i'}}, {skills: {$elemMatch: {$regex: data, $options: 'i'}}}]});
+        }else{
+            dbResponse = await StudentModel.find({});
+        }
+     res.status(200).json(dbResponse);
+        } catch (error) {
+            console.log(error.message)
+            res.status(400).json("Name not found");
+    }
+});
+
+
 
 router.get("/search/branch/:name", async (req, res)=> {
     //Search user by branch name
     const studentBranch = req.params.name.toUpperCase();
     try {
-        const dbResponse = await StudentModel.find({branch: studentBranch});
+        const dbResponse = await StudentModel.find({branch:{'$regex' : studentBranch, '$options' : 'i'}});
         res.status(200).json(dbResponse);
     } catch (error) {
-        res.status(400).json("Invalid branch");
+        res.status(400).json("Invalid branch name");
     }
 });
 

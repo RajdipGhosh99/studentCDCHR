@@ -149,17 +149,15 @@ router.put("/isgranted/update/:hrid", hrUserAuth, async (req, res)=>{
 
 
 
-router.put("/add-profile/:hrid", hrUserAuth, async (req, res)=>{
-    const hrid = req.params.hrid; 
-    const uid = req.userData._id;
-    const studentProfileId = req.body;
+router.put("/add-student-profile", hrUserAuth, async (req, res)=>{
+    // const hrid = req.params.hrid; 
+    const hrid = req.userData._id;
+    const studentId = req.body.studentId;
     try {
-        const dbResponse = await HRModel.findByIdAndUpdate(hrid, {$push: {sortlistedProfiles: studentProfileId}}, {new: true});
-        console.log(dbResponse)
+        const dbResponse = await HRModel.findByIdAndUpdate(hrid, {$push: {sortlistedProfiles: studentId}}, {new: true});
         res.status(200).json(dbResponse);
     } catch (error) {
-        res.status(400).json("Profile not add.")
-        console.log(error.message)
+        res.status(400).json("Student profile not add.")
     }
 });
 
