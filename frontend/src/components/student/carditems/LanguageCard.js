@@ -4,6 +4,18 @@ import TextField from "@material-ui/core/TextField";
 import { useState } from "react";
 import axios from "axios";
 import SaveIcon from "@material-ui/icons/Save";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 const LanguageCard = ({
   languageDetails,
@@ -48,10 +60,10 @@ const LanguageCard = ({
         });
         if (serverResponse.status == 200) {
           fetchStudentDataFromServer();
-          alert("Language updated successfully.");
+          toast.success("Language updated successfully", reactToastStyle);
         }
       } catch (error) {
-        alert(error.response.data);
+        toast.error(error.response.data, reactToastStyle);
       }
     }
   };
@@ -67,16 +79,17 @@ const LanguageCard = ({
         });
         if (serverResponse.status == 200) {
           fetchStudentDataFromServer();
-          alert("Language deleted successfully.");
+          toast.success("Language deleted successfully", reactToastStyle);
         }
       } catch (error) {
-        alert(error.response.data);
+        toast.error(error.response.data, reactToastStyle);
       }
     }
   };
 
   return (
     <div>
+     <ToastContainer />
       <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
         <div
           className="card my-3 shadow"

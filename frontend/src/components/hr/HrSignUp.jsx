@@ -1,6 +1,17 @@
 import { useState } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 const HrSignUp = () => {
@@ -36,10 +47,10 @@ const HrSignUp = () => {
                 hrRequestToAdmin(serverResponse.data._id);   
                 setTimeout(()=>{
                     history.push("/hrlogin");
-                }, 400);          
+                }, 2000);          
             }
         } catch (error) {
-            alert("Registration failed, Error: "+error.response.data);
+            toast.error("Registration failed, Error: "+error.response.data, reactToastStyle);
         }
     }
 
@@ -49,9 +60,7 @@ const HrSignUp = () => {
         try {
             const apiUrl = `http://localhost:8000/admin/hr-request/add`;
             const serverResponse = await axios.put(apiUrl, {hrid});
-            console.log("HR Request Id");
-            console.log(serverResponse);
-            alert("Registration successfull.");
+            toast.success("Registration successfull", reactToastStyle);
             setInputFormData({name: "", companyName: "", email: "", password: "", phoneNumber: ""});
 
         } catch (error) {
@@ -62,6 +71,7 @@ const HrSignUp = () => {
     return (
         <>
            <div className="my-5">
+           <ToastContainer />
            <h2 style={{textAlign: "center", marginTop: "70px"}}>HR Registration</h2>
             <form action="POST" className="signup" onSubmit={hrSugnupFormSubmit}>
                 <div className="mb-3">

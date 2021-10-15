@@ -4,6 +4,7 @@ const StudentModel = require('../models/hr_model');
 const userAuth = async (req, res, next)=>{
     try {
         const jwtToken = req.cookies.user_key;
+        console.log("hrt jwt=", jwtToken)
         const userObj = await jwt.verify(jwtToken, process.env.JWT_SECRET_KEY);
         const userId = userObj.userId;
         const dbResponse = await StudentModel.findOne({_id: userId, jwtToken: jwtToken});

@@ -19,6 +19,18 @@ import WorkExperience from './studentProfiles/WorkExperience';
 import LanguageProfile from './studentProfiles/LanguageProfile';
 import FieldofInterestProfile from './studentProfiles/FieldofInterestProfile';
 import VideoUrlProfile from './studentProfiles/VideoUrlProfile';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -87,10 +99,10 @@ const StudentProfile = () => {
             const serverResponse = await axios.put(apiUrl, inputFieldData, {withCredentials: true});
             if(serverResponse.status == 200){
               fetchStudentDataFromServer();
-              alert("Profile updated successfully.");
+              toast.success("Profile updated successfully", reactToastStyle);
             }
         } catch (error) {
-            alert("Profile not update "+error.response.data);
+            toast.error("Profile not update "+error.response.data, reactToastStyle);
         }
 
     }
@@ -98,6 +110,7 @@ const StudentProfile = () => {
     return(
         <>
         <section className="myprofile_root_div d-flex justify-content-center">
+        <ToastContainer />
         <div className="text-center shadow header_div_style p-4">
            <img src={profile_image_url} alt="" className="myprofile_profile_pic" />
           

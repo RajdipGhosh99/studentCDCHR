@@ -2,6 +2,18 @@ import axios from 'axios';
 import {useState, useContext} from 'react';
 import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -30,22 +42,23 @@ const AdminLogin = ()=>{
             const serverResponse = await axios.post(apiUrl, inputFormData);
             console.log(serverResponse)
             if(serverResponse.status == 200){
-                alert("Login Successfull.");
+                toast.success("Login Successfull", reactToastStyle);
                 const data = serverResponse.data;
                 setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, type: data.type});
                 setTimeout(()=>{
                     history.push("/");
-                }, 400);
+                }, 2000);
             } 
         } catch (error) {
             setCurrentUserData({...currentUserData, isAlreadyLogin: false});
-            alert(error.response.data);
+            toast.error(error.response.data, reactToastStyle);
         }
     }
 
     return(
         <>
           <div >
+          <ToastContainer />
           <h2 style={{marginTop: "70px", textAlign: "center"}}>Admin Login</h2>
            <hr/>
             <form action="POST" className="login" onSubmit={adminLoginFormSubmit} >

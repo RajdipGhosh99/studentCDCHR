@@ -4,6 +4,18 @@ import TextField from '@material-ui/core/TextField';
 import {useState } from 'react';
 import axios from 'axios';
 import SaveIcon from '@material-ui/icons/Save';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
@@ -52,10 +64,10 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
             const serverResponse = await axios.put(apiUrl, projectData, {withCredentials: true});
             if(serverResponse.status == 200){
               fetchStudentDataFromServer();
-              alert("Project updated successfully.");
+              toast.success("Project updated successfully", reactToastStyle);
             }
           } catch (error) {
-            alert(error.response.data);
+            toast.error(error.response.data, reactToastStyle);
           }
         }
       }
@@ -70,10 +82,10 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
                 const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
                 if(serverResponse.status == 200){
                   fetchStudentDataFromServer();
-                  alert("Project deleted successfully.");
+                  toast.success("Project deleted successfully", reactToastStyle);
                 }
             } catch (error) {
-                alert(error.response.data);
+              toast.error(error.response.data, reactToastStyle);
             }
           }
         
@@ -83,6 +95,7 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
 
     return(
         <div>
+         <ToastContainer />
          <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
          <div class="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid #e00476"}}>
            <div class="card-header d-flex justify-content-between"  style={{backgroundColor: "#e00476", color: "white"}} >

@@ -5,6 +5,18 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 const WorkExperienceCard = ({workExperienceDetails, modelId, fetchStudentDataFromServer})=>{
     console.log("Work experience card");
@@ -54,10 +66,11 @@ const WorkExperienceCard = ({workExperienceDetails, modelId, fetchStudentDataFro
                 const serverResponse = await axios.put(apiUrl, workExprienceData, {withCredentials: true});
                 if(serverResponse.status == 200){
                   fetchStudentDataFromServer();
-                  alert("Work experience update successfully.");
+                  alert(".");
+                  toast.success("Work experience update successfully", reactToastStyle);
                 }
               } catch (error) {
-                alert(error.response.data);
+                toast.error(error.response.data, reactToastStyle);
               }
             }
         }
@@ -72,10 +85,10 @@ const WorkExperienceCard = ({workExperienceDetails, modelId, fetchStudentDataFro
                   const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
                   if(serverResponse.status == 200){
                     fetchStudentDataFromServer();
-                    alert("Work experience deleted successfully.");
+                    toast.success("Work experience deleted successfully", reactToastStyle);
                   }
               } catch (error) {
-                  alert(error.response.data);
+                  toast.error(error.response.data, reactToastStyle);
               }
             }
           
@@ -84,6 +97,7 @@ const WorkExperienceCard = ({workExperienceDetails, modelId, fetchStudentDataFro
 
     return(
         <div>
+         <ToastContainer />
         <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
         <div className="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid orange"}}>
           <div className="card-header d-flex justify-content-between"  style={{backgroundColor: "orange", color: "white"}} >

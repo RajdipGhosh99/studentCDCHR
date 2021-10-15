@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
 import {useState, useContext} from 'react';
 import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const reactToastStyle = {

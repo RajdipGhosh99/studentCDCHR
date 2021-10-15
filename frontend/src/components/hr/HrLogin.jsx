@@ -4,6 +4,18 @@ import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
 import { useContext } from 'react';
 import Cookies from 'js-cookie';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -40,15 +52,16 @@ const HrLogin = () => {
                     const data = serverResponse.data;
                     Cookies.set("user_type", "hr", {expires: 60});
                     setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type, isGranted: data.isGranted});
+                    toast.success("Login successfull", reactToastStyle);
                     setTimeout(()=>{
                     history.push("/");
-                }, 400);
+                }, 2000);
                 }
                 
             } 
         } catch (error) {
             setCurrentUserData({...currentUserData, isAlreadyLogin: false});
-            alert(error.response.data);
+            toast.error(error.response.data, reactToastStyle);
         }
     }
 
@@ -56,6 +69,7 @@ const HrLogin = () => {
     return (
         <>
         <div >
+        <ToastContainer />
           <h2 style={{marginTop: "70px", textAlign: "center"}}>HR Login</h2>
            <hr/>
             <form action="POST" className="login" onSubmit={hrLoginFormSubmit} >

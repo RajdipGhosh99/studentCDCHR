@@ -2,6 +2,18 @@ import defaultUser from "../../images/default1.png";
 import "../../css/StudentCard.css";
 import axios from "axios";
 import StudentCVCard from "../student/StudentCVCard";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+  position: "top-center",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  };
 
 
 const StudentCard = ({studentData, fetchDataFromServer})=>{
@@ -12,16 +24,18 @@ const StudentCard = ({studentData, fetchDataFromServer})=>{
         const apiUrl = `http://localhost:8000/student/delete/${studentData._id}`;
         try {
             const serverResponse = await axios.delete(apiUrl);
+            toast.success("Student deleted successfully", reactToastStyle);
             fetchDataFromServer();
             
         } catch (error) {
-            alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }                
        }
     }
 
     return(
         <>
+           <ToastContainer />
            <div className="card shadow" style={{ width: "18rem" }} >
            <div className="text-center p-2">
            <img className="card-img-top img-fluid student_card_image" src={defaultUser}  alt="Card image cap" />

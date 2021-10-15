@@ -12,6 +12,18 @@ import profile_image_url from "../../images/default_hr.png";
 import axios from 'axios';
 import {currentUserDataContext} from "../../App";
 import "../../css/HrProfile.css";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+  position: "top-center",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  };
 
 
 const HrProfile = () => {
@@ -100,11 +112,11 @@ const HrProfile = () => {
         if(serverResponse.status == 200){
           const model = document.getElementById("exampleModalCenter");
           fetchHrDataFromServer();
-          alert("Profile updated successfully.");
+          toast.success("Profile updated successfully", reactToastStyle);
         }
       }
     } catch (error) {
-      alert(error.response.data);
+      toast.error(error.response.data, reactToastStyle);
     }
   }
 
@@ -112,6 +124,7 @@ const HrProfile = () => {
     return(
       <>
       <section className="myprofile_root_div d-flex justify-content-center">
+      <ToastContainer />
       <div className="text-center bg-light header_div_style p-4">
          <img src={profile_image_url} alt="" className="myprofile_profile_pic" />
         

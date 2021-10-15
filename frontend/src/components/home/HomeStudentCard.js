@@ -5,6 +5,18 @@ import {currentUserDataContext} from "../../App";
 import { useContext } from "react";
 import { useEffect, useState } from "react";
 import StudentCVCard from "../student/StudentCVCard";
+import { ToastContainer, toast } from 'react-toastify';
+
+const reactToastStyle = {
+  position: "top-center",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  };
+
 
 const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHrProfileDataFromServer})=>{
 
@@ -35,7 +47,7 @@ const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHr
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchHrProfileDataFromServer();
-            // alert("Profile added successfully.");
+            toast.success("Profile added successfully", reactToastStyle);
           }
         }else{
           alert("You are not authorized to add student profile.");
@@ -47,6 +59,7 @@ const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHr
 
     return(
         <>
+           <ToastContainer />
            <div className="card shadow" style={{ width: "18rem", height: "23rem"}} >
            <div className="text-center p-2">
            <img className="card-img-top img-fluid student_card_image" src={defaultUser}  alt="Card image cap" />
@@ -74,7 +87,7 @@ const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHr
              </div>
              <div>
              {
-                currentUserData.isGranted=="true" && currentUserData.type=="hr" ? isThisStudentProfileAlreadySelectedByHr ? <button className="btn btn-primary ml-3 disabled">Selected</button> : <button className="btn btn-danger ml-3" onClick={addProfileButtonClick}>Add Profile</button> : null
+                currentUserData.isGranted=="true" && currentUserData.type=="hr" ? isThisStudentProfileAlreadySelectedByHr ? <button className="btn btn-primary ml-3 disabled">Selected</button> : <button className="btn btn-primary ml-3" style={{backgroundColor: "#e60597", border: "0px"}} onClick={addProfileButtonClick}>Select Profile</button> : null
              }
                
              </div>

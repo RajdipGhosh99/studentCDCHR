@@ -5,6 +5,18 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import VideoProfileCard from '../carditems/VideoProfileCard';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -36,14 +48,14 @@ const VideoUrlProfile = ({studentVideoUrls, fetchStudentDataFromServer})=>{
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Link save successfully.");
+            toast.success("Link save successfully", reactToastStyle);
             setStudentVideoUrl({
               subject: "",
               videoUrl: ""
             });
           }
         } catch (error) {
-          alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }
       }
     }
@@ -58,7 +70,7 @@ const VideoUrlProfile = ({studentVideoUrls, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
-
+        <ToastContainer />
         <div className="row m-auto">
           <div className="col-4">
             <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Video Links</b></p>

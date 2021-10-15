@@ -6,6 +6,18 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
 import WorkExperienceCard from "../carditems/WorkExperienceCard";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -44,7 +56,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
           const serverResponse = await axios.put(apiUrl, workExperienceData, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Work experience added successfully.");
+            toast.success("Work experience added successfully", reactToastStyle);
             setWorkExperience({
               jobTitle: "",
               companyName: "",
@@ -55,7 +67,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
             });
           }
         } catch (error) {
-          alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }
       }
     }
@@ -65,7 +77,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
-
+        <ToastContainer />
         <div className="row m-auto">
           <div className="col-4">
           <p style={{textAlign: "start", color: "#ee00aa", fontSize: "22px"}}><b>Work Experiences</b> </p>

@@ -7,7 +7,6 @@ import StudentSortlistedProfileCard from './StudentSortlistedProfileCard';
 
 const SortlistedProfiles = ()=>{
 
-    const {currentUserData, setCurrentUserData} = useContext(currentUserDataContext);
     const [hrSortlistedProfileData, setHrSortlistedProfileData] = useState([]);
 
     const history = useHistory();
@@ -18,6 +17,8 @@ const SortlistedProfiles = ()=>{
             const apiUrl = `http://localhost:8000/hr/get-profile`;
             const serverResponse = await axios.get(apiUrl, {withCredentials: true});
             if(serverResponse.status == 200){
+                console.log("abcde hr sortlisted profile is called.......");
+                console.log(serverResponse.data.sortlistedProfiles)
                 setHrSortlistedProfileData(serverResponse.data.sortlistedProfiles);
             }
         } catch (error) {
@@ -51,7 +52,7 @@ const SortlistedProfiles = ()=>{
         {
             hrSortlistedProfileData.map((studentId, index)=>{
                 return(
-                    <StudentSortlistedProfileCard studentId={studentId} key={index} />
+                    <StudentSortlistedProfileCard studentId={studentId} fetchHrProfileDataFromServer={fetchHrProfileDataFromServer} key={index} />
                 )
             })
         }

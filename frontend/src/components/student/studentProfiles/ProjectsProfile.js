@@ -6,6 +6,18 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
 import ProjectCard from "../carditems/ProjectCard";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -43,7 +55,7 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
           const serverResponse = await axios.put(apiUrl, projectData, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Project added successfully.");
+            toast.success("Project added successfully", reactToastStyle);
             setProject({
               projectName: "",
               description: "",
@@ -53,7 +65,7 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
             });
           }
         } catch (error) {
-          alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }
       }
     }
@@ -63,7 +75,7 @@ const ProjectsProfile = ({studentProjects, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
-
+        <ToastContainer />
         <div className="row m-auto">
           <div className="col-4">
             <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Projects</b></p>

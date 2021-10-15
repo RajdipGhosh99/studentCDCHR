@@ -6,6 +6,18 @@ import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -32,11 +44,11 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Data added successfully.");
+            toast.success("Data added successfully", reactToastStyle);
             setFieldOfInterest("");
           }
         } catch (error) {
-          alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }
       }
     }
@@ -46,7 +58,7 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
     return(
         <>
         <div>
-
+        <ToastContainer />
         <div className="row m-auto">
           <div className="col-4">
             <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Field of Interests</b></p>
@@ -74,10 +86,10 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
                        const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
                        if(serverResponse.status == 200){
                            fetchStudentDataFromServer();
-                           alert("Data deleted successfully.");
+                           toast.success("Data deleted successfully", reactToastStyle);
                        }
                    } catch (error) {
-                       alert("Data not deleted. Error: "+error.response.data);
+                       toast.error(error.response.data, reactToastStyle);
                    }
                    }
                  }

@@ -4,6 +4,18 @@ import TextField from '@material-ui/core/TextField';
 import {useState } from 'react';
 import axios from 'axios';
 import SaveIcon from '@material-ui/icons/Save';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 const EducationCard = ({educationDetails, modelId, fetchStudentDataFromServer})=>{
@@ -39,10 +51,10 @@ const EducationCard = ({educationDetails, modelId, fetchStudentDataFromServer})=
             const serverResponse = await axios.put(apiUrl, educationData, {withCredentials: true});
             if(serverResponse.status == 200){
               fetchStudentDataFromServer();
-              alert("Education updated successfully.");
+              toast.success("Education updated successfully", reactToastStyle);
             }
           } catch (error) {
-            alert(error.response.data);
+            toast.error(error.response.data, reactToastStyle);
           }
         }
       }
@@ -57,10 +69,10 @@ const EducationCard = ({educationDetails, modelId, fetchStudentDataFromServer})=
                 const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
                 if(serverResponse.status == 200){
                   fetchStudentDataFromServer();
-                  alert("Education deleted successfully.");
+                  toast.success("Education deleted successfully", reactToastStyle);
                 }
             } catch (error) {
-                alert(error.response.data);
+              toast.error(error.response.data, reactToastStyle);
             }
           }
         
@@ -71,6 +83,7 @@ const EducationCard = ({educationDetails, modelId, fetchStudentDataFromServer})=
 
     return(
         <div>
+         <ToastContainer />
         <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
         <div className="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid #009431"}}>
           <div className="card-header d-flex justify-content-between"  style={{backgroundColor: "#009431", color: "white"}} >

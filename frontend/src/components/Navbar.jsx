@@ -37,6 +37,16 @@ return(
                                             </li> : null
                         }
 
+
+                        {
+                        currentUserData.type=="hr" && currentUserData.isGranted=="true" ? 
+                    <li>
+                        <NavLink className="nav-link active navbar_navlink" aria-current="page" exact to="/hrsortlisted-profiles" activeClassName="navlink_active">
+                        <PostAddIcon style={{color: "green", marginTop: "-5px", cursor: "pointer" , fontSize: "30px", marginLeft: "30px"}}/>Sortlisted Profiles
+                        </NavLink>
+                        
+                    </li> : null  }
+
                         {
                             currentUserData.isAlreadyLogin ? 
                             <li className="nav-item nav_list_item">
@@ -80,15 +90,6 @@ return(
                             <NavLink className="nav-link disabled text-black navbar_navlink" aria-current="page" exact to="#" >{currentUserData.name} ({currentUserData.type})</NavLink>
                         </li> : null
                     }  
-
-                    {
-                        currentUserData.type=="hr" && currentUserData.isGranted=="true" ? 
-                    <li>
-                        <NavLink className="nav-link active navbar_navlink" aria-current="page" exact to="/hrsortlisted-profiles" activeClassName="navlink_active">
-                        <PostAddIcon style={{color: "green", marginTop: "-5px", cursor: "pointer" , fontSize: "30px", marginLeft: "30px"}}/>Sortlisted Profiles
-                        </NavLink>
-                        
-                    </li> : null  }
 
                     </ul>
                 </div>

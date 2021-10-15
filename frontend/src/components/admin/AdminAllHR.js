@@ -47,8 +47,6 @@ const AdminAllHR = ()=>{
             const serverResponse = await axios.get(apiUrl);
             if(serverResponse.status == 200){
                 setAllHrsdata(serverResponse.data);
-                console.log("Hr Search data.......");
-                console.log(serverResponse.data)
             }
         } catch (error) {
             console.log(error.message);

@@ -6,6 +6,18 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
 import DeleteIcon from '@material-ui/icons/Delete';
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -40,11 +52,11 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Skill added successfully.");
+            toast.success("Skill added successfully", reactToastStyle);
             setNewSkill("");
           }
         } catch (error) {
-          alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }
       }
     }
@@ -60,11 +72,11 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Skill deleted successfully.");
+            toast.success("Skill deleted successfully", reactToastStyle);
             setSkillName("");
           }
         } catch (error) {
-          alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }
       }
     }
@@ -74,6 +86,7 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
+        <ToastContainer />
          <div className="row m-auto">
           <div className="col-4">
             <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Skills</b></p>

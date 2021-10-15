@@ -2,6 +2,19 @@ import defaultUser from "../../images/default_hr.png";
 import "../../css/HrCard.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+  position: "top-center",
+  autoClose: 2000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  };
+
 
 const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
     const [hrData, setHrData] = useState({});
@@ -18,7 +31,6 @@ const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
                 setHrData(serverResponse.data);
             }
         } catch (error) {
-            console.log(error.message);
         }
     }
 
@@ -46,8 +58,7 @@ const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
           hrRequestIdDelete();
         }
       } catch (error) {
-        alert("Update failed.");
-        console.log(error.message)
+        toast.error("Update failed", reactToastStyle);
       }
     }
 
@@ -57,17 +68,17 @@ const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
         const apiUrl = `http://localhost:8000/admin/hr-request/remove/${hrRequestId}`;
         const serverResponse = await axios.delete(apiUrl);
         if(serverResponse.status==200){
-          alert("Delete Successfully.");
+          toast.success("Delete Successfully", reactToastStyle);
           fetchDataFromServer();
         }
-        console.log(serverResponse);
       } catch (error) {
-        alert("Error: "+error.message);
+        toast.error("Error: "+error.message, reactToastStyle);
       }
     }
 
     return(
         <>
+           <ToastContainer />
           <div className="card shadow" style={{ width: "18rem" }} >
            <div className="text-center p-2">
            <img className="card-img-top img-fluid student_card_image" src={defaultUser}  alt="Card image cap" />

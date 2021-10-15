@@ -179,22 +179,23 @@ router.put("/add-student-profile", hrUserAuth, async (req, res)=>{
 });
 
 
-router.delete("/delete/sortlisted-profile/:hrid", hrUserAuth, async (req, res)=>{
-    const hrId = req.params.hrid;
-    const studentProfileId = req.body.sid;
-    console.log(hrId, studentProfileId)
+
+router.put("/sortlisted-profile/student/delete", hrUserAuth, async (req, res)=>{
+    const hrid = req.userData._id;
+    const studentId = req.body.studentId;
     try {
-        const dbResponse = await HRModel.updateOne({$pull: {sortlistedProfiles: {profileId: studentProfileId}}});
-        console.log(dbResponse)
-        if(dbResponse){
-            res.status(200).json("Remove successfully");
+        const response = await HRModel.findOne({_id: hrid, sortlistedProfiles: {$in: [studentId]}});
+        if(response){
+            //If studentId is present in sortlistedProfiles array
+            const dbResponse = await HRModel.findByIdAndUpdate(hrid, {$pull: {sortlistedProfiles: studentId}}, {new: true});
+            res.status(200).json(dbResponse);
         }else{
-            throw new Error();
+            //If studentId is not present in sortlistedProfiles array
+            res.status(400).json("Invalid item id");
         }
+       
     } catch (error) {
-        console.log(error.message);
-        res.status(400).json("Invalid id.");
-        
+        res.status(400).json("Item not delete. Invalid item id");
     }
 });
 

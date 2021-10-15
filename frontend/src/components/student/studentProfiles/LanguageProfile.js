@@ -6,6 +6,18 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {currentUserDataContext} from "../../../App";
 import LanguageCard from "../carditems/LanguageCard";
+import { ToastContainer, toast } from 'react-toastify';
+
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 
 
@@ -38,14 +50,14 @@ const LanguageProfile = ({studentLanguages, fetchStudentDataFromServer})=>{
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
             fetchStudentDataFromServer();
-            alert("Language added successfully.");
+            toast.success("Language added successfully", reactToastStyle);
             setNewLanguage({
               language: "",
               proficiency: ""
             });
           }
         } catch (error) {
-          alert(error.response.data);
+          toast.error(error.response.data, reactToastStyle);
         }
       }
     }
@@ -55,7 +67,7 @@ const LanguageProfile = ({studentLanguages, fetchStudentDataFromServer})=>{
     return(
         <>
         <div>
-
+        <ToastContainer />
         <div className="row m-auto">
           <div className="col-4">
             <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Languages</b></p>
