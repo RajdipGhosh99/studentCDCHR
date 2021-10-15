@@ -4,6 +4,10 @@ import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
+import "../../css/Login.css";
+import EmailIcon from '@material-ui/icons/Email';
+import LockIcon from '@material-ui/icons/Lock';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 const reactToastStyle = {
@@ -61,26 +65,26 @@ const Login = () => {
 
     return (
     <>
-    <div >
+    <div className="login_root_div">
     <ToastContainer />
-    <h2 style={{marginTop: "70px", textAlign: "center"}}>Student Login</h2>
-    <form action="POST" className="login" onSubmit={studentLoginFormSubmit}>
-                
-                    <div className="mb-3">
-                        <label for="exampleInputEmail1" className="form-label">Email address</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1" name="email" value={email} onChange={inputFieldChange} aria-describedby="emailHelp"/>
-                        <div id="emailHelp" className ="form-text">We'll never share your email with anyone else.</div>
-                    </div>
-                    <div className="mb-3">
-                        <label for="exampleInputPassword1" className="form-label">Password</label>
-                        <input type="password" className="form-control" name="password" value={password} onChange={inputFieldChange} id="exampleInputPassword1"/>
-                    </div>
-                    {/* <div className="mb-3 form-check">
-                        <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-                        <label className ="form-check-label" for="exampleCheck1">Accept our T&C</label>
-                    </div> */}
-                    <button type="submit" className="btn btn-primary">Submit</button>
+     <div className=" login_main_div shadow">
+      <h2 style={{color: "#e6054c", fontStyle: "italic", textAlign: "center"}}>Student Login</h2>
+      <hr/> 
+      <div className="login_form_div ">
+     <form action="POST" className="login" onSubmit={studentLoginFormSubmit}>
+      <div className="mb-3">
+          <label for="exampleInputEmail1 " className="form-label form_input_label"><EmailIcon className="login_icon"/>Email address*</label>
+          <input type="email" placeholder="Enter email address" className="form-control login_form_input" id="exampleInputEmail1" name="email" value={email} onChange={inputFieldChange} aria-describedby="emailHelp"/>
+      </div>
+      <div className="mb-3">
+          <label for="exampleInputPassword1" className="form-label form_input_label"><LockIcon className="login_icon" />Password*</label>
+          <input type="password" placeholder='Enter password' className="form-control login_form_input" name="password" value={password} onChange={inputFieldChange} id="exampleInputPassword1"/>
+      </div>
+     
+      <button type="submit" className="btn btn-primary" style={{backgroundColor: "#04bf62", border: "0px"}}>Login<ExitToAppIcon className="ml-1"/></button>
     </form>
+    </div>
+     </div>
     </div>
 
     </>

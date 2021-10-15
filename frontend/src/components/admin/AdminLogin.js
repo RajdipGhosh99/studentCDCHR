@@ -3,6 +3,10 @@ import {useState, useContext} from 'react';
 import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
+import "../../css/Login.css";
+import EmailIcon from '@material-ui/icons/Email';
+import LockIcon from '@material-ui/icons/Lock';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 const reactToastStyle = {
@@ -57,22 +61,25 @@ const AdminLogin = ()=>{
 
     return(
         <>
-          <div >
-          <ToastContainer />
-          <h2 style={{marginTop: "70px", textAlign: "center"}}>Admin Login</h2>
+          <div  className="login_root_div">
+            <ToastContainer />
+          <div className=" login_main_div shadow">
+          <h2 style={{color: "#e6054c", fontStyle: "italic", textAlign: "center"}}>Admin Login</h2>
            <hr/>
+           <div className="login_form_div">
             <form action="POST" className="login" onSubmit={adminLoginFormSubmit} >
-
-                <div className="mb-3">
-                    <label for="exampleInputEmail1" className="form-label">Email address*</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" required aria-describedby="emailHelp" name="email" value={email} onChange={inputFieldChange}  />
-                </div>
-                <div className="mb-3">
-                    <label for="exampleInputPassword1" className="form-label">Password*</label>
-                    <input type="password" className="form-control" name="password" required value={password} onChange={inputFieldChange} id="exampleInputPassword1" />
-                </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+              <div className="mb-3">
+               <label for="exampleInputEmail1" className="form-label form_input_label"><EmailIcon className="login_icon"/>Email address*</label>
+               <input type="email" className="form-control login_form_input" id="exampleInputEmail1" required aria-describedby="emailHelp" name="email" value={email} onChange={inputFieldChange}  />
+              </div>
+              <div className="mb-3">
+               <label for="exampleInputPassword1" className="form-label form_input_label"><LockIcon className="login_icon" />Password*</label>
+               <input type="password" className="form-control login_form_input" name="password" required value={password} onChange={inputFieldChange} id="exampleInputPassword1" />
+              </div>
+              <button type="submit" className="btn btn-primary"  style={{backgroundColor: "#04bf62", border: "0px"}}>Login<ExitToAppIcon className="ml-1"/></button>
             </form>
+            </div>
+            </div>
             </div>
         </>
     );
