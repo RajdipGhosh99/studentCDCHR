@@ -7,6 +7,10 @@ import HrCard from "../hr/HrCard";
 
 const AdminAllHR = ()=>{
     const [allHrsData, setAllHrsdata] = useState([]);
+    //To perform searching poeration
+    const [hrSearchField, setHrSearchField] = useState("");
+
+
     useEffect( ()=>{
         fetchDataFromServer();
     },[]);
@@ -15,10 +19,39 @@ const AdminAllHR = ()=>{
         const apiUrl = `http://localhost:8000/hr/viewall`;
         try {
             const serverResponse = await axios.get(apiUrl);
-            console.log(serverResponse.data);
             setAllHrsdata(serverResponse.data);
         } catch (error) {
             console.log(error.response.data);
+        }
+    }
+
+    const inputFieldChange = (event)=>{
+        const fieldValue = event.target.value;
+        setHrSearchField(fieldValue);
+    }
+
+    const refreshButtonClick = ()=>{
+        fetchDataFromServer();
+        setHrSearchField("");
+    }
+
+    const hrSearchFormSubmit = async (event)=>{
+        event.preventDefault();
+        let searchingValue = "all_documents";
+        if(hrSearchField.trim().length>0){
+            //When user put something in searching bar
+            searchingValue = hrSearchField;
+        }
+        try {
+            const apiUrl = `http://localhost:8000/hr/search/value/${searchingValue}`;
+            const serverResponse = await axios.get(apiUrl);
+            if(serverResponse.status == 200){
+                setAllHrsdata(serverResponse.data);
+                console.log("Hr Search data.......");
+                console.log(serverResponse.data)
+            }
+        } catch (error) {
+            console.log(error.message);
         }
     }
 
@@ -27,13 +60,18 @@ const AdminAllHR = ()=>{
     <div className="admin_dashboard_root_div">
      <AdminDashboardNav />
      <div className="d-flex justify-content-center mt-3">
+     <button type="button" class="btn btn-outline-danger" onClick={refreshButtonClick} style={{marginRight: "8px", fontSize: "16px"}}>Refresh</button>
      <div>
         <form class="form-inline my-2 my-lg-0">
-         <input class="form-control mr-sm-2" type="search" placeholder="Search HR..." aria-label="Search" />
-         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+         <input class="form-control mr-sm-2" type="search" placeholder="Search HR..." aria-label="Search" name="hrSearchField" value={hrSearchField} onChange={inputFieldChange} />
+         <button class="btn btn-outline-success my-2 my-sm-0"  onClick={hrSearchFormSubmit} >Search</button>
        </form>
      </div>
      </div>
+      {
+        allHrsData.length ? null : <p style={{color: "#ee00aa", fontSize: "30px", fontWeight: "600", textAlign: "center", marginTop: "30px"}}>Data not found</p>
+      } 
+
      <div className="row mt-4 container-fluid ">
      {
         allHrsData.map((Hr, index)=>{

@@ -2,6 +2,17 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 const SignUp = ()=>{
 
@@ -32,15 +43,14 @@ const SignUp = ()=>{
         try {
             const serverResponse = await axios.post(apiUrl, inputFormData);
             if(serverResponse.status==201){
-                alert("Registration successfull.");
                 setInputFormData({name: "", branch: "", course: "", email: "", password: "", phoneNumber: ""});
+                toast.success("Registration successfull.", reactToastStyle);
                 setTimeout(()=>{
                     history.push("/login");
-                }, 400);
+                }, 2000);
             }
         } catch (error) {
-            console.log(error.response.data);
-            alert("Registration failed, Error: "+error.response.data);
+            toast.error(error.response.data, reactToastStyle);
         }
     }
 
@@ -48,6 +58,7 @@ const SignUp = ()=>{
         <>
           <div className="my-5">
             <h2 style={{textAlign: "center", marginTop: "70px"}}>Student Registration</h2>
+            <ToastContainer />
             <hr/>
             <form action="POST" className="signup" onSubmit={studentSignupFormSubmit}>
                 <div className="mb-3">

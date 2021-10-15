@@ -1,10 +1,20 @@
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import {useState, useContext} from 'react';
 import {currentUserDataContext} from "../../App";
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
 
 
+const reactToastStyle = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    };
 
 const Login = () => {
 
@@ -34,24 +44,25 @@ const Login = () => {
             const apiUrl = `http://localhost:8000/student/signin`;
             const serverResponse = await axios.post(apiUrl, inputFormData, {withCredentials: true});
             if(serverResponse.status == 200){
-                alert("Login successfull.");
                 const data = serverResponse.data;
                 //set cookies in client side
                 Cookies.set("user_type", "student", {expires: 60});
                 setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, profile_pic: data.profile_pic, type: data.type});
+                toast.success("Login successfull", reactToastStyle);
                 setTimeout(()=>{
                     history.push("/");
-                }, 400);
+                }, 2000);
             } 
         } catch (error) {
             setCurrentUserData({...currentUserData, isAlreadyLogin: false});
-            alert(error.response.data);
+            toast.error(error.response.data, reactToastStyle);
         }
     }
 
     return (
     <>
     <div >
+    <ToastContainer />
     <h2 style={{marginTop: "70px", textAlign: "center"}}>Student Login</h2>
     <form action="POST" className="login" onSubmit={studentLoginFormSubmit}>
                 

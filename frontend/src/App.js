@@ -20,6 +20,7 @@ import AdminAllHRRequests from "./components/admin/AdminHRRequests";
 import SortlistedProfiles from "./components/hr/SortListedProfiles";
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import 'react-toastify/dist/ReactToastify.css';
 
 const currentUserDataContext = React.createContext();
 

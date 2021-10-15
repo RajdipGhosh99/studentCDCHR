@@ -54,6 +54,7 @@ const Home = ()=>{
     const refreshButtonClick = ()=>{
         fetchAllStudentsFromServer();
         fetchHrProfileDataFromServer();
+        setStudentSearchField("");
     }
 
     const inputFieldChange = (event)=>{

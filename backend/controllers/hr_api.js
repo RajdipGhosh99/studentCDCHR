@@ -46,6 +46,23 @@ router.get("/get-profile", hrUserAuth, async (req, res)=> {
 });
 
 
+router.get("/search/value/:data", async (req, res)=> {
+    const data = req.params.data.trim();
+    try {
+        let dbResponse = "";
+        if(data != "all_documents"){
+        dbResponse = await HRModel.find( {$and: [ {$or: [{name:{'$regex' : data, '$options' : 'i'}}, {companyName:{'$regex' : data, '$options' : 'i'}}, {email:{'$regex' : data, '$options' : 'i'}}]}, {isGranted: "true"}]});
+        }else{
+            dbResponse = await HRModel.find({});
+        }
+     res.status(200).json(dbResponse);
+        } catch (error) {
+            console.log(error.message)
+            res.status(400).json("Name not found");
+    }
+});
+
+
 
 router.get("/search/company-name/:name", async  (req, res)=>{
     const companyName = req.params.name;

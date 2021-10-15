@@ -31,7 +31,7 @@ const StudentCard = ({studentData, fetchDataFromServer})=>{
          <div className="card-body text-start">
            <h5 className="card-title hr_card_text">{studentData.name}</h5>
            <p className="card-text hr_card_text"><b>Type: </b>{studentData.type} </p>
-           <p className="card-text hr_card_text">{studentData.course} in {studentData.branch}</p>
+           <p className="card-text hr_card_text"><b>Degree: </b>{studentData.course} in {studentData.branch}</p>
            <p className="card-text hr_card_text" style={{marginTop: "16px"}}><b>Skills:</b> 
            <span>
             {
