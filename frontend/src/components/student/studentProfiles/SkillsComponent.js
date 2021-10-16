@@ -108,8 +108,8 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
              {
               studentSkills.map((skill, index)=>{
                 return(
-                  <div className="col-lg-2 col-md-2 col-sm-3 col-3" key={index}>
-                  <button type="button" class="btn btn-success my-1" style={{fontSize: "15px"}}>{skill}</button>
+                  <div className="col-lg-3 col-md-3 col-sm-3 col-3" key={index}>
+                  <button type="button" class="btn btn-success my-1" style={{fontSize: "15px", width: "110px"}}>{skill}</button>
 
                     {/* <div style={{backgroundColor: "green", color: "white", borderRadius: "17px", padding: "10px 3px 1px 3px", textAlign: "center"}}><p></p></div> */}
                   </div>

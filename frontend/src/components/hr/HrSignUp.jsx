@@ -2,6 +2,12 @@ import { useState } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
+import "../../css/Signup.css";
+import PersonIcon from '@material-ui/icons/Person';
+import EmailIcon from '@material-ui/icons/Email';
+import LockIcon from '@material-ui/icons/Lock';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import CameraAltIcon from '@material-ui/icons/CameraAlt';
 
 const reactToastStyle = {
     position: "top-center",
@@ -70,42 +76,42 @@ const HrSignUp = () => {
 
     return (
         <>
-           <div className="my-5">
+           <div className="signup_root_div">
            <ToastContainer />
-           <h2 style={{textAlign: "center", marginTop: "70px"}}>HR Registration</h2>
+           <div className="signup_main_div">
+           <h2 style={{color: "#05e374", fontStyle: "italic", textAlign: "center"}}>HR Registration</h2>
+           <hr  className="hr_line"/>
+           <div className="signup_form_div">
             <form action="POST" className="signup" onSubmit={hrSugnupFormSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputName" className="form-label">Name*</label>
-                    <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required name="name" value={name} onChange={inputFieldChange}   />
+                    <label htmlFor="exampleInputName" className="form-label form_input_label">Name*</label>
+                    <input type="text" placeholder="Enter name" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" required name="name" value={name} onChange={inputFieldChange}   />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputBranch" className="form-label">Company Name*</label>
-                    <input type="text" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required name="companyName" value={companyName} onChange={inputFieldChange} />
+                    <label htmlFor="exampleInputBranch" className="form-label form_input_label">Company Name*</label>
+                    <input type="text" placeholder="Enter company name" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" required name="companyName" value={companyName} onChange={inputFieldChange} />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputProfilePic" className="form-label">Profoile Picture</label>
-                    <input type="file" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="" />
+                    <label htmlFor="exampleInputProfilePic" className="form-label form_input_label">Profoile Picture</label>
+                    <input type="file" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" value="" />
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="exampleInputEmail" className="form-label">Email address*</label>
-                    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required name="email" value={email} onChange={inputFieldChange} />
-                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+                    <label htmlFor="exampleInputEmail" className="form-label form_input_label">Email address*</label>
+                    <input type="email" placeholder="Enter email address" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" required name="email" value={email} onChange={inputFieldChange} />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label" >Password*</label>
-                    <input type="password" className="form-control" required name="password" value={password} onChange={inputFieldChange} required id="exampleInputPassword1" />
+                    <label htmlFor="exampleInputPassword1" className="form-label form_input_label" >Password*</label>
+                    <input type="password" placeholder="Enter password" className="form-control signup_form_input" required name="password" value={password} onChange={inputFieldChange} required id="exampleInputPassword1" />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword2" className="form-label" required value="">Phone Number*</label>
-                    <input type="number" className="form-control" id="exampleInputPassword1" name="phoneNumber" value={phoneNumber} onChange={inputFieldChange} />
+                    <label htmlFor="exampleInputPassword2" className="form-label form_input_label" required value="">Phone Number*</label>
+                    <input type="number" placeholder="Enter phone number" className="form-control signup_form_input" id="exampleInputPassword1" name="phoneNumber" value={phoneNumber} onChange={inputFieldChange} />
                 </div>
-                {/* <div className="mb-3 form-check">
-                    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                    <label className="form-check-label" htmlFor="exampleCheck1" required>Accept our T&C</label>
-                </div> */}
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-success mt-4"><PersonAddIcon className="mr-2"/>SignUp</button>
             </form>
+            </div>
+            </div>
             </div>
         </>
     );

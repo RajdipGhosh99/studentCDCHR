@@ -4,10 +4,8 @@ import axios from 'axios';
 import { useHistory } from "react-router";
 import { ToastContainer, toast } from 'react-toastify';
 import "../../css/Signup.css";
-
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
-import HomeIcon from '@material-ui/icons/Home';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
@@ -74,7 +72,7 @@ const SignUp = ()=>{
             <div className="signup_form_div">
             <form action="POST" className="signup" onSubmit={studentSignupFormSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputName" className="form-label form_input_label"><PersonIcon className="signup_icon"/>Name*</label>
+                    <label htmlFor="exampleInputName" className="form-label form_input_label">Name*</label>
                     <input type="text" placeholder="Enter name" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" name="name" required value={name} onChange={inputFieldChange} />
                 </div>
                 <div className="mb-3">
@@ -86,16 +84,16 @@ const SignUp = ()=>{
                     <input type="text"  placeholder="Enter course name" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" name="course" required  value={course} onChange={inputFieldChange}  />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputProfilePic" className="form-label form_input_label"><CameraAltIcon className="signup_icon"/>Profoile Picture</label>
+                    <label htmlFor="exampleInputProfilePic" className="form-label form_input_label">Profoile Picture</label>
                     <input type="file"  placeholder="" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" />
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="exampleInputEmail" className="form-label form_input_label"><EmailIcon className="signup_icon"/>Email address*</label>
+                    <label htmlFor="exampleInputEmail" className="form-label form_input_label">Email address*</label>
                     <input type="email" placeholder="Enter email address"  className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required  value={email} onChange={inputFieldChange}  />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label form_input_label" required value=""><LockIcon className="signup_icon"/>Password*</label>
+                    <label htmlFor="exampleInputPassword1" className="form-label form_input_label" required value="">Password*</label>
                     <input type="password"  placeholder="Enter password"  className="form-control signup_form_input" id="exampleInputPassword1" name="password"  value={password} onChange={inputFieldChange}  />
                 </div>
                 <div className="mb-3">
