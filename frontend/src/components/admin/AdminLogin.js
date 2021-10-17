@@ -7,6 +7,8 @@ import "../../css/Login.css";
 import EmailIcon from '@material-ui/icons/Email';
 import LockIcon from '@material-ui/icons/Lock';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { NavLink } from 'react-router-dom';
 
 
 const reactToastStyle = {
@@ -30,6 +32,8 @@ const AdminLogin = ()=>{
         password: ""
     });
 
+    const [progressbarState, setProgressbarState] = useState(false);
+
     const inputFieldChange = (event) => {
        const fieldName = event.target.name;
        const fieldValue = event.target.value;
@@ -42,10 +46,12 @@ const AdminLogin = ()=>{
     const adminLoginFormSubmit = async (event) => {
         event.preventDefault();
         try {
+            setProgressbarState(true);
             const apiUrl = `http://localhost:8000/admin/signin`;
             const serverResponse = await axios.post(apiUrl, inputFormData);
             console.log(serverResponse)
             if(serverResponse.status == 200){
+                setProgressbarState(false);
                 toast.success("Login Successfull", reactToastStyle);
                 const data = serverResponse.data;
                 setCurrentUserData({...currentUserData, isAlreadyLogin: true, userId: data._id, name: data.name, type: data.type});
@@ -54,6 +60,7 @@ const AdminLogin = ()=>{
                 }, 2000);
             } 
         } catch (error) {
+            setProgressbarState(false);
             setCurrentUserData({...currentUserData, isAlreadyLogin: false});
             toast.error(error.response.data, reactToastStyle);
         }
@@ -76,7 +83,19 @@ const AdminLogin = ()=>{
                <label for="exampleInputPassword1" className="form-label form_input_label"><LockIcon className="login_icon" />Password*</label>
                <input type="password" className="form-control login_form_input" name="password" required value={password} onChange={inputFieldChange} id="exampleInputPassword1" />
               </div>
-              <button type="submit" className="btn btn-primary"  style={{backgroundColor: "#04bf62", border: "0px"}}>Login<ExitToAppIcon className="ml-1"/></button>
+              {/* <button type="submit" className="btn btn-primary"  style={{backgroundColor: "#04bf62", border: "0px"}}>Login<ExitToAppIcon className="ml-1"/></button> */}
+              <div className="d-flex justify-content-start align-content-center" style={{width: "420px"}}>
+                <div>
+                <button type="submit" className="btn btn-success mt-1" style={{backgroundColor: "#04bf62", border: "0px"}}>Login<ExitToAppIcon className="ml-1"/></button>
+                </div>
+                <div style={{width: "60px"}} className="ml-3 mr-4">
+                {
+                  progressbarState ? <CircularProgress style={{color: "green"}} /> : null
+                }
+                </div>
+                </div>
+
+
             </form>
             </div>
             </div>

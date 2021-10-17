@@ -9,6 +9,8 @@ import "../../css/Login.css";
 import EmailIcon from '@material-ui/icons/Email';
 import LockIcon from '@material-ui/icons/Lock';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { NavLink } from 'react-router-dom';
 
 
 const reactToastStyle = {
@@ -28,6 +30,7 @@ const HrLogin = () => {
         email: "",
         password: ""
     });
+    const [progressbarState, setProgressbarState] = useState(false);
 
     const {currentUserData, setCurrentUserData}  = useContext(currentUserDataContext);
     const history = useHistory();
@@ -44,9 +47,11 @@ const HrLogin = () => {
     const hrLoginFormSubmit = async (event) => {
         event.preventDefault();
         try {
+            setProgressbarState(true);
             const apiUrl = `http://localhost:8000/hr/signin`;
             const serverResponse = await axios.post(apiUrl, inputFormData, {withCredentials: true});
             if(serverResponse.status == 200){
+                setProgressbarState(false);
                 console.log(serverResponse);
                 if(serverResponse.data.isGranted == "pending"){
                     alert("Admin not yet verify your profile, Please wait 1-2 days...");
@@ -64,6 +69,7 @@ const HrLogin = () => {
                 
             } 
         } catch (error) {
+            setProgressbarState(false);
             setCurrentUserData({...currentUserData, isAlreadyLogin: false});
             toast.error(error.response.data, reactToastStyle);
         }
@@ -88,11 +94,23 @@ const HrLogin = () => {
                     <label for="exampleInputPassword1" className="form-label form_input_label"><LockIcon className="login_icon" />Password*</label>
                     <input type="password" className="form-control login_form_input" name="password" value={password} onChange={inputFieldChange} id="exampleInputPassword1" />
                 </div>
-                {/* <div className="mb-3 form-check">
-                    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                    <label className="form-check-label" for="exampleCheck1">Accept our T&C</label>
-                </div> */}
-                <button type="submit" className="btn btn-success">Login<ExitToAppIcon className="ml-1"/></button>
+             
+                {/* <button type="submit" className="btn btn-success">Login<ExitToAppIcon className="ml-1"/></button> */}
+
+                <div className="d-flex justify-content-start align-content-center" style={{width: "420px"}}>
+                <div>
+                <button type="submit" className="btn btn-success mt-1" style={{backgroundColor: "#04bf62", border: "0px"}}>Login<ExitToAppIcon className="ml-1"/></button>
+                </div>
+                <div style={{width: "60px"}} className="ml-3 mr-4">
+                {
+                  progressbarState ? <CircularProgress style={{color: "green"}} /> : null
+                }
+                </div>
+                <div>
+                  <NavLink exact to="/hrsignup" ><p className=" mt-2">New User? Create Account</p></NavLink>
+                </div>
+                </div>
+
             </form>
             </div>
             </div>
