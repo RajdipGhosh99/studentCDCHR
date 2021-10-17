@@ -35,6 +35,8 @@ const HrProfile = () => {
     email: "",
     companyName: "",
     phoneNumber: "",
+    address: "",
+    linkedinLink: "",
     profile_pic: ""
 });
   const [hrData, setHrData] = useState({
@@ -42,6 +44,8 @@ const HrProfile = () => {
     hrEmail: "",
     hrCompanyName: "",
     hrPhoneNumber: "",
+    hrAddress: "",
+    hrLinkedinLink: "",
     hrProfile_pic: ""
   });
 
@@ -54,8 +58,8 @@ const HrProfile = () => {
         console.log("Hr profile fetch data...")
         console.log(serverResponse.data);
         const data = serverResponse.data;
-        setHrData({...hrData, hrName: data.name, hrEmail: data.email, hrCompanyName: data.companyName, hrPhoneNumber: data.phoneNumber+"", hrProfile_pic: data.profile_pic});
-        setInputFieldsData({...inputFieldsData, name: data.name, email: data.email, companyName: data.companyName, phoneNumber: data.phoneNumber+"", profile_pic: data.profile_pic});
+        setHrData({...hrData, hrName: data.name, hrEmail: data.email, hrCompanyName: data.companyName, hrPhoneNumber: data.phoneNumber+"", hrAddress: data.address, hrLinkedinLink: data.linkedinLink, hrProfile_pic: data.profile_pic});
+        setInputFieldsData({...inputFieldsData, name: data.name, email: data.email, companyName: data.companyName, phoneNumber: data.phoneNumber+"", address: data.address, linkedinLink: data.linkedinLink, profile_pic: data.profile_pic});
       }
     } catch (error) {
       console.log(error.message);
@@ -71,13 +75,12 @@ const HrProfile = () => {
     setInputFieldsData({...inputFieldsData, [fieldName]: fieldValue});
   }
 
-  const {name, email, companyName, phoneNumber, profile_pic} = inputFieldsData;
-  const { hrName, hrEmail, hrCompanyName, hrPhoneNumber, hrProfile_pic} = hrData;
+  const {name, email, companyName, phoneNumber, address, linkedinLink, profile_pic} = inputFieldsData;
+  const { hrName, hrEmail, hrCompanyName, hrPhoneNumber, hrAddress, hrLinkedinLink, hrProfile_pic} = hrData;
 
 
   useState(()=>{
     fetchHrDataFromServer();
-    console.log("Fetch data from server again ........")
   }, []);
 
   const inputValidation = ()=>{
@@ -95,7 +98,7 @@ const HrProfile = () => {
   }
 
   const profileEditIconClick = ()=>{
-    setInputFieldsData({name: hrName, email: hrEmail, companyName: hrCompanyName, phoneNumber: hrPhoneNumber, profile_pic: hrProfile_pic});
+    setInputFieldsData({name: hrName, email: hrEmail, companyName: hrCompanyName, phoneNumber: hrPhoneNumber, address: hrAddress, linkedinLink: hrLinkedinLink, profile_pic: hrProfile_pic});
   }
 
 
@@ -125,7 +128,7 @@ const HrProfile = () => {
       <>
       <section className="myprofile_root_div d-flex justify-content-center">
       <ToastContainer />
-      <div className="text-center bg-light header_div_style p-4">
+      <div className="text-center header_div_style p-4 shadow" style={{backgroundColor: "#edeff2"}}>
          <img src={profile_image_url} alt="" className="myprofile_profile_pic" />
         
          <input accept="image/*" id="icon-button-file" type="file"  style={{display: "none"}} name="profile_image" />
@@ -140,6 +143,8 @@ const HrProfile = () => {
          <p style={{textAlign: "start"}}><b>Email Address: </b>{hrEmail}</p>
          <p style={{textAlign: "start"}}><b>Company Name:  </b>{hrCompanyName}</p>
          <p style={{textAlign: "start"}}><b>Phone Number: </b>{hrPhoneNumber}</p>
+         <p style={{textAlign: "start"}}><b>Current Address:  </b>{hrAddress}</p>
+         <p style={{textAlign: "start"}}><b>Linkedin Link:  </b><a href={hrLinkedinLink} target="_blank" >{hrLinkedinLink}</a></p>
 
 
            {/* modal */}
@@ -207,9 +212,46 @@ const HrProfile = () => {
              onChange={inputFieldChange}
              name="phoneNumber"
              value={phoneNumber}
+             type="number"
               id="standard-full-width"
               style={{ margin: "8px"}}
               placeholder="Enter Skills"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+              shrink: true,
+              }} />
+            </div>
+
+
+            <div>
+             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Current Address</label>
+             <TextField
+             onChange={inputFieldChange}
+             name="address"
+             value={address}
+             type="text"
+              id="standard-full-width"
+              style={{ margin: "8px"}}
+              placeholder="Enter your current address"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+              shrink: true,
+              }} />
+            </div>
+
+            
+            <div>
+             <label htmlFor="exampleFormControlTextarea1" className=" form-label myprofile_form_label " style={{fontWeight: "700"}}>Linkedin Link</label>
+             <TextField
+             onChange={inputFieldChange}
+             name="linkedinLink"
+             value={linkedinLink}
+             type="text"
+              id="standard-full-width"
+              style={{ margin: "8px"}}
+              placeholder="Enter Linkedin link"
               fullWidth
               margin="normal"
               InputLabelProps={{

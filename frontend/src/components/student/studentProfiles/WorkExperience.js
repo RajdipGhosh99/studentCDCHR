@@ -121,7 +121,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
-                placeholder="Enter project name"
+                placeholder="Enter job title"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
@@ -137,7 +137,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
-                placeholder="Enter project description"
+                placeholder="Enter company name"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
@@ -153,7 +153,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
-                placeholder="Enter url"
+                placeholder="Enter work description"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
@@ -170,7 +170,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
-                placeholder="Project starting date"
+                placeholder="Enter company address"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
@@ -187,7 +187,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
-                placeholder="Project starting date"
+                placeholder="Job starting date"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{
@@ -204,7 +204,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
                onChange={inputFieldChange}
                 id="standard-full-width"
                 style={{ margin: "8px"}}
-                placeholder="Project ending date"
+                placeholder="Job ending date"
                 fullWidth
                 margin="normal"
                 InputLabelProps={{

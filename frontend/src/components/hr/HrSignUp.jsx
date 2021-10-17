@@ -8,6 +8,9 @@ import EmailIcon from '@material-ui/icons/Email';
 import LockIcon from '@material-ui/icons/Lock';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import {NavLink} from 'react-router-dom';
+
 
 const reactToastStyle = {
     position: "top-center",
@@ -30,8 +33,12 @@ const HrSignUp = () => {
         email: "",
         password: "",
         phoneNumber: "",
+        address: "",
         type: "hr"
     });
+
+    const [progressbarState, setProgressbarState] = useState(false);
+
 
     const inputFieldChange = (event) => {
         const fieldName = event.target.name;
@@ -40,12 +47,13 @@ const HrSignUp = () => {
     }
 
 
-    const {name, companyName, email, password, phoneNumber} = inputFormData;
+    const {name, companyName, email, password, phoneNumber, address} = inputFormData;
 
     const hrSugnupFormSubmit = async (event) => {
         event.preventDefault();
         const apiUrl = `http://localhost:8000/hr/signup`;
         try {
+            setProgressbarState(true);
             inputFormData.type = "hr";
             const serverResponse = await axios.post(apiUrl, inputFormData);
             if(serverResponse.status==201){
@@ -56,6 +64,7 @@ const HrSignUp = () => {
                 }, 2000);          
             }
         } catch (error) {
+            setProgressbarState(false);
             toast.error("Registration failed, Error: "+error.response.data, reactToastStyle);
         }
     }
@@ -67,9 +76,11 @@ const HrSignUp = () => {
             const apiUrl = `http://localhost:8000/admin/hr-request/add`;
             const serverResponse = await axios.put(apiUrl, {hrid});
             toast.success("Registration successfull", reactToastStyle);
-            setInputFormData({name: "", companyName: "", email: "", password: "", phoneNumber: ""});
+            setProgressbarState(false);
+            setInputFormData({name: "", companyName: "", email: "", password: "", phoneNumber: "", address: ""});
 
         } catch (error) {
+            setProgressbarState(false);
             throw new Error();
         }
     }
@@ -108,11 +119,28 @@ const HrSignUp = () => {
                     <label htmlFor="exampleInputPassword2" className="form-label form_input_label" required value="">Phone Number*</label>
                     <input type="number" placeholder="Enter phone number" className="form-control signup_form_input" id="exampleInputPassword1" name="phoneNumber" value={phoneNumber} onChange={inputFieldChange} />
                 </div>
-                <button type="submit" className="btn btn-success mt-4"><PersonAddIcon className="mr-2"/>SignUp</button>
-            </form>
-            </div>
-            </div>
-            </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPhone" className="form-label form_input_label">Current Address</label>
+                    <input type="text" placeholder="Enter your current address" className="form-control signup_form_input" id="exampleInputPhone" aria-describedby="emailHelp" name="address"  value={address} onChange={inputFieldChange}  required />
+                </div>
+
+                <div className="d-flex justify-content-start align-items-center" style={{width: "500px"}}>
+                <div>
+                <button type="submit" className="btn btn-success mt-0"><PersonAddIcon className="mr-1"/>SignUp</button>
+                </div>
+                <div style={{width: "60px"}} className="ml-3 mr-4">
+                {
+                  progressbarState ? <CircularProgress style={{color: "green"}} /> : null
+                }
+                </div>
+                <div>
+                  <NavLink exact to="/hrlogin" ><p className=" mt-2">Already have an Account?</p></NavLink>
+                </div>
+                </div>
+                </form>
+                </div>
+                </div>
+                </div>
         </>
     );
 }

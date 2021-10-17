@@ -46,9 +46,13 @@ const hrSchema = new mongoose.Schema({
             }
         }
     },
-    address: {},
-    githubLink: {
-        type: String
+    address: {
+        type: String,
+        default: "none"
+    },
+    linkedinLink: {
+        type: String,
+        default: "none"
     },
     isGranted: {
         //This field value will be pending/true/false
