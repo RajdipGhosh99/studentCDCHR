@@ -88,11 +88,11 @@ const HrLogin = () => {
 
                 <div className="mb-3">
                     <label for="exampleInputEmail1" className="form-label form_input_label"><EmailIcon className="login_icon"/>Email address*</label>
-                    <input type="email" className="form-control login_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" value={email} onChange={inputFieldChange}  />
+                    <input type="email" placeholder="Enter email address" className="form-control login_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" value={email} onChange={inputFieldChange}  />
                 </div>
                 <div className="mb-3">
                     <label for="exampleInputPassword1" className="form-label form_input_label"><LockIcon className="login_icon" />Password*</label>
-                    <input type="password" className="form-control login_form_input" name="password" value={password} onChange={inputFieldChange} id="exampleInputPassword1" />
+                    <input type="password" placeholder="Enter password" className="form-control login_form_input" name="password" value={password} onChange={inputFieldChange} id="exampleInputPassword1" />
                 </div>
              
                 {/* <button type="submit" className="btn btn-success">Login<ExitToAppIcon className="ml-1"/></button> */}
