@@ -37,8 +37,8 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
         setStudentProject({...studentProject, [fieldName]: fieldValue});
       }
 
-      console.log("Project card items");
-      console.log(projectDetails)
+      // console.log("Project card items");
+      // console.log(projectDetails)
   
   
       const {_id, projectName, description, projectUrl, startingDate, endingDate} = studentProject;

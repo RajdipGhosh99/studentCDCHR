@@ -10,6 +10,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {NavLink} from 'react-router-dom';
+import firebase from '../../Firebase/Firebasecofig';
 
 
 const reactToastStyle = {
@@ -24,17 +25,16 @@ const reactToastStyle = {
 
 
 const HrSignUp = () => {
-
+    const firebaseStorageRef = firebase.storage().ref();
     const history = useHistory();
-
     const [inputFormData, setInputFormData] = useState({
         name: "",
+        profile_pic: "default",
         companyName: "",
         email: "",
         password: "",
         phoneNumber: "",
         address: "",
-        type: "hr"
     });
 
     const [progressbarState, setProgressbarState] = useState(false);
@@ -42,20 +42,36 @@ const HrSignUp = () => {
 
     const inputFieldChange = (event) => {
         const fieldName = event.target.name;
-        const fieldValue = event.target.value;
+        let fieldValue = event.target.value;
+        if(fieldName=="profile_pic"){
+            fieldValue = event.target.files[0];
+        }
         setInputFormData({...inputFormData, [fieldName]: fieldValue});
     }
 
 
-    const {name, companyName, email, password, phoneNumber, address} = inputFormData;
+    const {name, profile_pic, companyName, email, password, phoneNumber, address} = inputFormData;
 
     const hrSugnupFormSubmit = async (event) => {
         event.preventDefault();
+        setProgressbarState(true);
+        if(profile_pic!="default"){
+            uploadProfilePictureOnFirebse(profile_pic);
+        }else{
+            saveSignupProfileDataOnServer("default");
+        }
+    }
+
+
+    const saveSignupProfileDataOnServer = async (imageUrl)=>{
         const apiUrl = `http://localhost:8000/hr/signup`;
         try {
             setProgressbarState(true);
-            inputFormData.type = "hr";
-            const serverResponse = await axios.post(apiUrl, inputFormData);
+            // inputFormData.type = "hr";
+            const data = {
+                name, profile_pic: imageUrl, companyName, email, password, phoneNumber, address, type: "hr"
+            }
+            const serverResponse = await axios.post(apiUrl, data);
             if(serverResponse.status==201){
                 //HR request to Admin
                 hrRequestToAdmin(serverResponse.data._id);   
@@ -68,6 +84,31 @@ const HrSignUp = () => {
             toast.error("Registration failed, Error: "+error.response.data, reactToastStyle);
         }
     }
+
+
+
+    const uploadProfilePictureOnFirebse = (file)=>{
+        //save user profile image on firebase storage
+        try {
+          const uploadTask = firebaseStorageRef.child(`hr-profile-pictures/${(Date.now()) + (file.name)}`).put(file);
+          uploadTask.on("state_changed",
+           (snapshot)=>{
+             //for handeling upload progress
+            },
+            (error) => {
+              console.log(error.message);
+              saveSignupProfileDataOnServer("default");
+            },
+            async () => {
+              //Get image download url
+              const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+              saveSignupProfileDataOnServer(imageUrl);
+            }
+           )
+        } catch (error) {
+          saveSignupProfileDataOnServer("default");
+        }
+      }
 
 
     const hrRequestToAdmin = async (hrid)=>{
@@ -103,8 +144,8 @@ const HrSignUp = () => {
                     <input type="text" placeholder="Enter company name" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" required name="companyName" value={companyName} onChange={inputFieldChange} />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputProfilePic" className="form-label form_input_label">Profoile Picture</label>
-                    <input type="file" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" value="" />
+                 <label htmlFor="exampleInputProfilePic" className="form-label form_input_label">Profoile Picture</label>
+                 <input type="file" accept="image/*"  name="profile_pic" onChange={inputFieldChange} className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" />
                 </div>
 
                 <div className="mb-3">

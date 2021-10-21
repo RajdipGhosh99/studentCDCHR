@@ -21,7 +21,7 @@ const userAuth = async (req, res, next)=>{
 
     } catch (error) {
         console.log(error.message)
-        res.status(401).json("unauthorized user. First Login or SignIn.");
+        res.status(401).json("unauthorized user. First Signup or SignIn.");
     }
 }
 

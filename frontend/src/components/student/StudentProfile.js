@@ -7,7 +7,8 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 import { NavLink } from "react-router-dom";
-import { useState, useEffect, useContext } from 'react';import profile_image_url from "../../images/default1.png";
+import { useState, useEffect, useContext } from 'react';
+import profile_image_url from "../../images/default1.png";
 import axios from 'axios';
 import {currentUserDataContext} from "../../App";
 import "../../css/StudentProfile.css";
@@ -20,6 +21,9 @@ import LanguageProfile from './studentProfiles/LanguageProfile';
 import FieldofInterestProfile from './studentProfiles/FieldofInterestProfile';
 import VideoUrlProfile from './studentProfiles/VideoUrlProfile';
 import { ToastContainer, toast } from 'react-toastify';
+import { CircularProgress } from '@material-ui/core';
+import firebase from '../../Firebase/Firebasecofig';
+
 
 
 const reactToastStyle = {
@@ -34,13 +38,17 @@ const reactToastStyle = {
 
 
 
+
 const StudentProfile = () => {
-
+   const firebaseStorageRef = firebase.storage().ref();
     const {currentUserData, setCurrentUserData}  = useContext(currentUserDataContext);
-
+    const [updateImageButtonState, setUpdateImageButtonState] = useState(false);
     const [studentData, setStudentData] = useState({});
+    const [imageProgressbarState, setImageProgressbarState] = useState(false);
     const [inputFieldData, setInputFieldData] = useState({
       name: "",
+      profile_pic: "",
+      profile_pic_url: "",
       branch: "",
       course: "",
       email: "",
@@ -51,7 +59,7 @@ const StudentProfile = () => {
     });
 
 
-    const {name, branch, course, email, phoneNumber, linkedinLink, address, carrierObjective} = inputFieldData;
+    const {name, profile_pic, profile_pic_url, branch, course, email, phoneNumber, linkedinLink, address, carrierObjective} = inputFieldData;
 
     
     const fetchStudentDataFromServer = async ()=>{
@@ -60,8 +68,7 @@ const StudentProfile = () => {
         const serverResponse = await axios.get(apiUrl);
         if(serverResponse.status == 200){
           setStudentData(serverResponse.data);
-          console.lon("aaaaaaaaaaa")
-          console.log(setStudentData)
+          setInputFieldData({...inputFieldData, profile_pic_url: serverResponse.data.profile_pic!="default"?serverResponse.data.profile_pic : profile_image_url});
         }
       } catch (error) {
         console.log(error.message);
@@ -73,6 +80,13 @@ const StudentProfile = () => {
       fetchStudentDataFromServer();
     }, []);
 
+    useEffect(()=>{
+      if(profile_pic){
+        setInputFieldData({...inputFieldData, profile_pic_url: URL.createObjectURL(profile_pic)});
+        setUpdateImageButtonState(true);
+      }
+    }, [profile_pic]);
+
 
 
 
@@ -81,7 +95,12 @@ const StudentProfile = () => {
 
     const inputFieldChange = (event) => {
         const fieldName = event.target.name;
-        const fieldValue = event.target.value;
+        let fieldValue = event.target.value;
+        if(fieldName=="profile_pic"){
+          fieldValue = event.target.files[0];
+          // console.log("Uploaded profile picture");
+          // console.log(fieldValue);
+        }
         setInputFieldData({...inputFieldData, [fieldName]: fieldValue});
     }
 
@@ -107,14 +126,78 @@ const StudentProfile = () => {
 
     }
 
+
+    const onSaveImageButtonClick = ()=>{
+      // alert("Image save button click.");
+      uploadProfilePictureOnFirebse(profile_pic);
+      setImageProgressbarState(true);
+    }
+
+    const onCancelImageButtonClick = ()=>{
+      setUpdateImageButtonState(false);
+      setInputFieldData({...inputFieldData, profile_pic_url: studentData.profile_pic!="default"?studentData.profile_pic : profile_image_url, profile_pic: ""});
+    }
+
+    const uploadProfilePictureOnFirebse = (file)=>{
+      //save user profile image on firebase storage
+      try {
+        const uploadTask = firebaseStorageRef.child(`student-profile-pictures/${(Date.now()) + (file.name)}`).put(file);
+        uploadTask.on("state_changed",
+         (snapshot)=>{
+           //for handeling upload progress
+          },
+          (error) => {
+            console.log(error.message);
+            setImageProgressbarState(false);
+            setUpdateImageButtonState(false);
+    
+          },
+          async () => {
+            //Get image download url
+            const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+            // save user data on server with his/her profile image
+            saveProfileImageUrlOnServer(imageUrl);
+          }
+         )
+      } catch (error) {
+        setImageProgressbarState(false);
+        toast.error("Profile image not update ", reactToastStyle);
+        setUpdateImageButtonState(false);
+      }
+    }
+
+
+    
+
+    const saveProfileImageUrlOnServer = async (imageUrl)=>{
+      //Save firebase profile image link on nodejs server
+      try {
+        const apiUrl = `http://localhost:8000/student/update/${currentUserData.userId}`;
+        const data = {profile_pic: imageUrl};
+        const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
+        if(serverResponse.status == 200){
+          toast.success("Profile image updated successfully", reactToastStyle);
+          setImageProgressbarState(false);
+          setUpdateImageButtonState(false);
+          //Reload current user data from server
+          fetchStudentDataFromServer();
+        }
+      } catch (error) {
+        toast.error("Profile image not update ", reactToastStyle);
+        setImageProgressbarState(false);
+        setUpdateImageButtonState(false);
+      }
+    }
+
+
     return(
         <>
         <section className="myprofile_root_div d-flex justify-content-center">
         <ToastContainer />
         <div className="text-center shadow header_div_style p-4">
-           <img src={profile_image_url} alt="" className="myprofile_profile_pic" />
+           <img src={profile_pic_url} alt="" className="myprofile_profile_pic" />
           
-           <input accept="image/*" id="icon-button-file" type="file"  style={{display: "none"}} name="profile_image" />
+           <input accept="image/*" id="icon-button-file" type="file"  style={{display: "none"}} onChange={inputFieldChange} name="profile_pic" />
               <label htmlFor="icon-button-file">
                 <IconButton color="secondary" aria-label="upload picture" component="span" >
                 <Tooltip title="Change Profile Picture">
@@ -122,6 +205,31 @@ const StudentProfile = () => {
                   </Tooltip>
                 </IconButton>
               </label>
+
+
+              {updateImageButtonState ? 
+           <>
+           <div className="d-flex align-items-center justify-content-center mt-2">
+             <div className="mr-3">
+              <Button variant="contained" className="update_image_button" onClick={onSaveImageButtonClick}  startIcon={<SaveIcon />} >
+                  Save
+              </Button>
+             </div>
+             <div>
+               {imageProgressbarState ? <CircularProgress color="primary" className="mr-3" /> : null }
+             </div>
+             <div>
+             <Button variant="contained" color="secondary" className="cancel_image_button" onClick={onCancelImageButtonClick}    startIcon={<CancelIcon />} >
+                  Cancel
+              </Button>
+             </div>
+           </div>
+           </> : null }
+
+
+
+
+
            <h2 className="myprofile_user_name">{studentData.name}<EditIcon className="edit_profile_icon" onClick={profileEditIconClick}  data-toggle="modal" data-target="#exampleModalCenterstudentprofile" /></h2>
              <hr className="hr_line" />
            <div className="row text-start mt-4">

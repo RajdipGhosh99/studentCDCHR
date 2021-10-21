@@ -10,6 +10,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import firebase from '../../Firebase/Firebasecofig';
 
 
 
@@ -24,11 +25,12 @@ const reactToastStyle = {
     };
 
 const SignUp = ()=>{
-
+    const firebaseStorageRef = firebase.storage().ref();
     const history = useHistory();
 
     const [inputFormData, setInputFormData] = useState({
         name: "",
+        profile_pic: "default",
         branch: "",
         course: "",
         email: "",
@@ -42,22 +44,38 @@ const SignUp = ()=>{
 
     const inputFieldChange = (event) => {
         const fieldName = event.target.name;
-        const fieldValue = event.target.value;
+        let fieldValue = event.target.value;
+        if(fieldName=="profile_pic"){
+            fieldValue = event.target.files[0];
+        }
         setInputFormData({...inputFormData, [fieldName]: fieldValue});
     }
 
 
-    const {name, branch, course, email, password, phoneNumber} = inputFormData;
+    const {name, profile_pic, branch, course, email, password, phoneNumber} = inputFormData;
 
     const studentSignupFormSubmit = async (event) => {
         event.preventDefault();
+        setProgressbarState(true);
+        if(profile_pic!="default"){
+            uploadProfilePictureOnFirebse(profile_pic);
+        }else{
+            saveSignupProfileDataOnServer("default");
+        }
+    }
+
+
+    const saveSignupProfileDataOnServer = async (imageUrl)=>{
         const apiUrl = `http://localhost:8000/student/signup`;
         try {
             setProgressbarState(true);
-            const serverResponse = await axios.post(apiUrl, inputFormData);
+            const data = {
+                name, profile_pic: imageUrl, branch, course, email, password, phoneNumber, type: "student"
+            }
+            const serverResponse = await axios.post(apiUrl, data);
             if(serverResponse.status==201){
                 setProgressbarState(false);
-                setInputFormData({name: "", branch: "", course: "", email: "", password: "", phoneNumber: ""});
+                setInputFormData({name: "", profile_pic: "default", branch: "", course: "", email: "", password: "", phoneNumber: ""});
                 toast.success("Registration successfull.", reactToastStyle);
                 setTimeout(()=>{
                     history.push("/login");
@@ -65,9 +83,43 @@ const SignUp = ()=>{
             }
         } catch (error) {
             setProgressbarState(false);
+            console.log("Error mt "+error.response.data)
             toast.error(error.response.data, reactToastStyle);
         }
-    }
+      }
+
+    
+    const uploadProfilePictureOnFirebse = (file)=>{
+        //save user profile image on firebase storage
+        try {
+          const uploadTask = firebaseStorageRef.child(`student-profile-pictures/${(Date.now()) + (file.name)}`).put(file);
+          uploadTask.on("state_changed",
+           (snapshot)=>{
+             //for handeling upload progress
+            },
+            (error) => {
+              console.log(error.message);
+              saveSignupProfileDataOnServer("default");
+
+      
+            },
+            async () => {
+              //Get image download url
+              const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+              saveSignupProfileDataOnServer(imageUrl);
+            }
+           )
+        } catch (error) {
+          saveSignupProfileDataOnServer("default");
+        }
+      }
+
+
+ 
+
+
+
+
 
     return(
         <>
@@ -92,7 +144,7 @@ const SignUp = ()=>{
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputProfilePic" className="form-label form_input_label">Profoile Picture</label>
-                    <input type="file"  placeholder="" className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                    <input type="file" accept="image/*"  name="profile_pic" onChange={inputFieldChange} className="form-control signup_form_input" id="exampleInputEmail1" aria-describedby="emailHelp" />
                 </div>
 
                 <div className="mb-3">

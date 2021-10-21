@@ -20,7 +20,7 @@ const StudentCVCard = ({studentData, modalId})=>{
                       
                     <div className="row m-auto" style={{width: "70rem"}}>
                       <div className="col-4 text-start">
-                        <img className="img-fluid student_cv_profile_image" src={defaultUser} alt="profile image"  />
+                        <img className="img-fluid student_cv_profile_image" style={{width: "160px", height: "155px", border: "3px solid #ee00aa", borderRadius: "50%", objectFit: "cover"}} src={studentData.profile_pic=="default" ? defaultUser : studentData.profile_pic} alt="profile image"  />
                       </div>
                       <div className="col-8">
                        <h3 className="resume_student_name">{studentData.name}</h3>

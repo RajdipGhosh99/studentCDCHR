@@ -60,11 +60,11 @@ const HomeStudentCard = ({studentData, modalId, hrSortlistedProfileData, fetchHr
     return(
         <>
            <ToastContainer />
-           <div className="card shadow" style={{ width: "18rem", height: "23rem"}} >
+           <div className="card shadow" style={{ width: "18rem", height: "24rem"}} >
            <div className="text-center p-2">
-           <img className="card-img-top img-fluid student_card_image" src={defaultUser}  alt="Card image cap" />
+           <img className="card-img-top img-fluid student_card_image" style={{width: "100%", height: "200px", objectFit: "fill"}} src={studentData.profile_pic=="default" ? defaultUser : studentData.profile_pic}  alt="Card image cap" />
            </div>
-           <hr/>
+           {/* <hr/> */}
          
          <div className="card-body text-start">
            <h5 className="card-text hr_card_text"><b>Name: </b>{studentData.name} {currentUserData.userId==studentData._id? <span style={{color: "#ee00aa"}}> (your Profile)</span> : null}</h5>

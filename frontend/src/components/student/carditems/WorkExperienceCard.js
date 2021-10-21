@@ -19,8 +19,7 @@ const reactToastStyle = {
     };
 
 const WorkExperienceCard = ({workExperienceDetails, modelId, fetchStudentDataFromServer})=>{
-    console.log("Work experience card");
-    console.log("modelId=", modelId)
+  
 
         const [studentWorkExperience, setStudentWorkExperience] = useState({
             _id: workExperienceDetails._id,

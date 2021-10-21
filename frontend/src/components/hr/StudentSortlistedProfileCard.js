@@ -71,11 +71,11 @@ const StudentSortlistedProfileCard = ({studentId, fetchHrProfileDataFromServer})
       
         <div className="card shadow" style={{ width: "18rem", height: "24rem"}} >
            <div className="text-center p-2">
-           <img className="card-img-top img-fluid student_card_image" src={defaultUser}  alt="Card image cap" />
+           <img className="card-img-top img-fluid student_card_image"  style={{width: "100%", height: "200px", objectFit: "fill"}} src={studentProfileData.profile_pic=="default" ? defaultUser : studentProfileData.profile_pic}  alt="Card image cap" />
            </div>
            <hr/>
          
-         <div className="card-body text-start">
+         <div className="card-body text-start" style={{marginTop: "-22px"}}>
            <h5 className="card-title hr_card_text"><b>Name: </b>{studentProfileData.name}</h5>
            {/* <p className="card-text hr_card_text"><b>Type: </b>{studentProfileData.type} </p> */}
            <p className="card-text hr_card_text"><b>Qualification: </b>{studentProfileData.course} in {studentProfileData.branch}</p>
