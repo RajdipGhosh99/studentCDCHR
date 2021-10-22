@@ -81,9 +81,9 @@ const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
            <ToastContainer />
           <div className="card shadow" style={{ width: "18rem" }} >
            <div className="text-center p-2">
-           <img className="card-img-top img-fluid student_card_image" src={defaultUser}  alt="Card image cap" />
+           <img className="card-img-top img-fluid student_card_image"   style={{width: "100%", height: "200px", objectFit: "fill"}}   src={hrData.profile_pic=="default" ? defaultUser : hrData.profile_pic}  alt="Card image cap" />
            </div>
-           <hr/>
+           {/* <hr/> */}
          
          <div className="card-body text-start">
            <h5 className="card-title hr_card_text"><b>Name: </b>{hrData.name}</h5>
