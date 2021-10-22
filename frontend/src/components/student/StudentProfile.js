@@ -113,9 +113,13 @@ const StudentProfile = () => {
 
 
     const profileAddBtnClick = async () => {
-        const apiUrl = `http://localhost:8000/student/update/${currentUserData.userId}`;
+        
         try {
-            const serverResponse = await axios.put(apiUrl, inputFieldData, {withCredentials: true});
+            const apiUrl = `http://localhost:8000/student/update/${currentUserData.userId}`;
+            const data = {
+             name, branch, course, phoneNumber, linkedinLink, address, carrierObjective
+            };
+            const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
             if(serverResponse.status == 200){
               fetchStudentDataFromServer();
               toast.success("Profile updated successfully", reactToastStyle);
