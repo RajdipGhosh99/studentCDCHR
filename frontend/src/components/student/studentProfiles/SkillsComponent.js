@@ -47,7 +47,7 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
         alert("Write skill name in input field.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/skills/update`;
+          const apiUrl = `/student/skills/update`;
           const data = {skill: newSkill};
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
@@ -67,7 +67,7 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
         alert("Please fill input field properly.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/skills/delete`;
+          const apiUrl = `/student/skills/delete`;
           const data = {skill: skillName};
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
@@ -88,18 +88,20 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
         <div>
         <ToastContainer />
          <div className="row m-auto">
-          <div className="col-4">
+          <div className="col-lg-6 col-md-6 col-sm-12 col-12">
             <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Skills</b></p>
           </div>
-          <div className="col-4 text-start">
+          <div className="col-lg-6 col-md-6 col-sm-12 col-12 d-flex justify-content-between align-items-center" >
+          <div className="">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style={{fontSize: "13px"}}>Add Skill</button>
           </div>
-          <div className="col-4 text-start">
+          <div className="text-start">
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCenterdeleteskill" style={{fontSize: "13px"}}>Delete Skill</button>
+          </div>
           </div>
          </div>
 
-        <hr style={{marginTop: "-4px"}}/>
+        <hr />
         
            <div className="row mb-0 text-start">
              {
@@ -108,7 +110,7 @@ const SkillsComponent = ({studentSkills, fetchStudentDataFromServer})=>{
              {
               studentSkills.map((skill, index)=>{
                 return(
-                  <div className="col-lg-3 col-md-3 col-sm-3 col-3" key={index}>
+                  <div className="col-lg-3 col-md-3 col-sm-4 col-6 text-center" key={index}>
                   <button type="button" class="btn btn-success my-1" style={{fontSize: "15px", width: "110px"}}>{skill}</button>
 
                     {/* <div style={{backgroundColor: "green", color: "white", borderRadius: "17px", padding: "10px 3px 1px 3px", textAlign: "center"}}><p></p></div> */}

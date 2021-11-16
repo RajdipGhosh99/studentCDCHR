@@ -21,6 +21,8 @@ import SortlistedProfiles from "./components/hr/SortListedProfiles";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from "./components//Footer"
+
 
 const currentUserDataContext = React.createContext();
 
@@ -44,12 +46,14 @@ const App = () => {
         //Fetch student data from server when app is load
         console.log("hello home student is called");
         console.log(currentUserData.type);
+        // apiUrl = `/student/get-profile`;
         apiUrl = `http://localhost:8000/student/get-profile`;
         // setCurrentUserData({...currentUserData, isGranted: "false"});
       }else if(currentUserData.type == "hr"){
         //Fetch HR data from server when app is load
         console.log("hello home HR is called");
         console.log(currentUserData.type);
+        // apiUrl = `/hr/get-profile`;
          apiUrl = `http://localhost:8000/hr/get-profile`;
         //  setCurrentUserData({...currentUserData, isGranted: "true"});
       }else{
@@ -99,6 +103,7 @@ const App = () => {
         <Route exact path ="/terms" component={Terms}/>
         <Route path ="/logout" component={Logout}/>
       </Switch>
+      <Footer/>
       </currentUserDataContext.Provider>
     </>
 

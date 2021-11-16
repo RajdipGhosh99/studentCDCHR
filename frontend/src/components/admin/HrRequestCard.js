@@ -24,7 +24,7 @@ const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
     }, []);
 
     const fetchHRDataFromServer = async ()=>{
-        const apiUrl = `http://localhost:8000/hr/search/${hrRequestId}`;
+        const apiUrl = `/hr/search/${hrRequestId}`;
         try {
             const serverResponse = await axios.get(apiUrl);
             if(serverResponse.status == 200){
@@ -50,7 +50,7 @@ const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
 
 
     const hrIsGrantedStatusUpdate = async (value)=>{
-      const apiUrl = `http://localhost:8000/hr/isgranted/update/${hrRequestId}`;
+      const apiUrl = `/hr/isgranted/update/${hrRequestId}`;
       const data = {isGranted: value};
       try {
         const serverResponse = await axios.put(apiUrl, data);
@@ -65,7 +65,7 @@ const HrRequestCard = ({hrRequestId, fetchDataFromServer})=>{
 
     const hrRequestIdDelete = async ()=>{
       try {
-        const apiUrl = `http://localhost:8000/admin/hr-request/remove/${hrRequestId}`;
+        const apiUrl = `/admin/hr-request/remove/${hrRequestId}`;
         const serverResponse = await axios.delete(apiUrl);
         if(serverResponse.status==200){
           toast.success("Delete Successfully", reactToastStyle);

@@ -53,7 +53,7 @@ const LanguageCard = ({
       alert("Please fill input fields properly.");
     } else {
       try {
-        const apiUrl = `http://localhost:8000/student/languages/update`;
+        const apiUrl = `/student/languages/update`;
         const languageData = { language: studentLanguageDetails };
         const serverResponse = await axios.put(apiUrl, languageData, {
           withCredentials: true,
@@ -72,7 +72,7 @@ const LanguageCard = ({
     const value = window.confirm("Are you sure to delete this information");
     if (value) {
       try {
-        const apiUrl = `http://localhost:8000/student/languages/delete`;
+        const apiUrl = `/student/languages/delete`;
         const data = { languageDetails: languageDetails };
         const serverResponse = await axios.put(apiUrl, data, {
           withCredentials: true,
@@ -88,7 +88,7 @@ const LanguageCard = ({
   };
 
   return (
-    <div>
+    <div className="p-0">
      <ToastContainer />
       <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
         <div

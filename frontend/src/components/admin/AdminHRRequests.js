@@ -12,7 +12,8 @@ const AdminAllHRRequests = ()=>{
     },[]);
 
     const fetchDataFromServer = async ()=>{
-        const apiUrl = `http://localhost:8000/admin/hr-request/all`;
+        // const apiUrl = `/admin/hr-request/all`;
+        const apiUrl = ` http://localhost:8000/admin/hr-request/all`;
         try {
             const serverResponse = await axios.get(apiUrl);
             console.log(serverResponse.data);

@@ -59,7 +59,7 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
           alert("Please fill input fields properly.");
         }else{
           try {
-            const apiUrl = `http://localhost:8000/student/projects/update`;
+            const apiUrl = `/student/projects/update`;
             const projectData = {project: studentProject};
             const serverResponse = await axios.put(apiUrl, projectData, {withCredentials: true});
             if(serverResponse.status == 200){
@@ -77,7 +77,7 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
           const value = window.confirm("Are you sure to delete this project")
           if(value){
             try {
-                const apiUrl = `http://localhost:8000/student/projects/delete`;
+                const apiUrl = `/student/projects/delete`;
                 const data = {projectDetails: projectDetails};
                 const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
                 if(serverResponse.status == 200){
@@ -94,9 +94,9 @@ const ProjectCard = ({projectDetails, modelId, fetchStudentDataFromServer})=>{
 
 
     return(
-        <div>
+        <div className="p-0">
          <ToastContainer />
-         <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto">
+         <div className="col-lg-12 col-md-12 col-sm-12 col-12 m-auto d-block p-0">
          <div class="card my-3 shadow" style={{backgroundColor: "#ebf0ed", border: "3px solid #e00476"}}>
            <div class="card-header d-flex justify-content-between"  style={{backgroundColor: "#e00476", color: "white"}} >
            <div>

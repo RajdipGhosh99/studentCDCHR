@@ -19,7 +19,7 @@ const VideoProfileCard = ({videoDetails, fetchStudentDataFromServer})=>{
         const value = window.confirm("Are you sure to delete this information.");
         if(value){
         try {
-            const apiUrl = `http://localhost:8000/student/video-url/delete`;
+            const apiUrl = `/student/video-url/delete`;
             const data = {
                 videoDeatils: videoDetails
             }
@@ -37,9 +37,9 @@ const VideoProfileCard = ({videoDetails, fetchStudentDataFromServer})=>{
     return(
             <div className="col-12 card shadow p-2 my-1 d-flex justify-content-between flex-row">
              <ToastContainer />
-             <div>
+             <div className="text-start">
                <p style={{fontWeight: "700", marginTop: "8px"}} className="text-start">{videoDetails.subject}</p>
-               <p>Video Link: <a target="_blank" href={videoDetails.videoUrl}>{videoDetails.videoUrl}</a></p>
+               <p className="text-start">Video Link: <a target="_blank" href={videoDetails.videoUrl}>{videoDetails.videoUrl}</a></p>
              </div>
              <div>
                <DeleteIcon style={{color: "#eb0273", cursor: "pointer"}} onClick={videoDeleteIconClick} />

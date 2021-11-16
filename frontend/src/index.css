@@ -22,3 +22,9 @@ html{
   padding-left: 5rem;
   width: 50%;
 }
+.contact{
+  min-height: 100vh;
+}
+.admin_dashboard_root_div{
+  min-height: 100vh;
+}

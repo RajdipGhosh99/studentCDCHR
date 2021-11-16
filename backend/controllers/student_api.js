@@ -86,7 +86,7 @@ router.post("/signup", async (req, res)=>{
     const clientData = req.body;
     try {
         if(!clientData.name || !clientData.course || !clientData.branch || !clientData.email || !clientData.password || !clientData.phoneNumber || !clientData.type){
-            res.status(420).json("Please fill the input fields properly");
+            res.status(422).json("Please fill the input fields properly");
         }else{
             try {
                 const newStudent = new StudentModel(clientData);

@@ -51,7 +51,7 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
         alert("Please fill all the fields properly.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/work-experiences/add`;
+          const apiUrl = `/student/work-experiences/add`;
           const workExperienceData = {workExprience: workExperience};
           const serverResponse = await axios.put(apiUrl, workExperienceData, {withCredentials: true});
           if(serverResponse.status == 200){
@@ -79,14 +79,14 @@ const WorkExperience = ({studentWorkExperience, fetchStudentDataFromServer})=>{
         <div>
         <ToastContainer />
         <div className="row m-auto">
-          <div className="col-4">
+          <div className="col-12 col-sm-6 col-md-6 col-lg-6">
           <p style={{textAlign: "start", color: "#ee00aa", fontSize: "22px"}}><b>Work Experiences</b> </p>
           </div>
-          <div className="col-4 text-start">
+          <div className="col-12 col-sm-6 col-md-6 col-lg-6 text-start">
             <button type="button" className="btn btn-primary fw-bold" data-toggle="modal" data-target="#exampleModalCenterworkexperience" style={{fontSize: "13px"}}>Add Experience</button>
           </div>
          </div>
-        <hr style={{marginTop: "-3px"}}/>
+        <hr/>
 
            <div className="row mt-0 text-start">
            {

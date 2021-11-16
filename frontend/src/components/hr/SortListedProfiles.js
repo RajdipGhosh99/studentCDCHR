@@ -14,11 +14,12 @@ const SortlistedProfiles = ()=>{
     const fetchHrProfileDataFromServer = async ()=>{
         //Fetch hr profile data from server
         try {
+            // const apiUrl = `/hr/get-profile`;
             const apiUrl = `http://localhost:8000/hr/get-profile`;
             const serverResponse = await axios.get(apiUrl, {withCredentials: true});
             if(serverResponse.status == 200){
-                console.log("abcde hr sortlisted profile is called.......");
-                console.log(serverResponse.data.sortlistedProfiles)
+                // console.log("abcde hr sortlisted profile is called.......");
+                // console.log(serverResponse.data.sortlistedProfiles)
                 setHrSortlistedProfileData(serverResponse.data.sortlistedProfiles);
             }
         } catch (error) {
@@ -48,7 +49,7 @@ const SortlistedProfiles = ()=>{
             <button className="btn btn-success mt-3" onClick={homeButtonClick}>Home</button>
             </div> : null
           }
-        <div className="container-fluid row">
+        <div className="container-fluid row p-0 m-0">
         {
             hrSortlistedProfileData.map((studentId, index)=>{
                 return(

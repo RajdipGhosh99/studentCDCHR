@@ -39,7 +39,7 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
         alert("Please fill all input fields properly.");
       }else{
         try {
-          const apiUrl = `http://localhost:8000/student/field-of-interest/add`;
+          const apiUrl = `/student/field-of-interest/add`;
           const data = {fieldOfInterest: fieldOfInterest};
           const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
           if(serverResponse.status == 200){
@@ -60,17 +60,17 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
         <div>
         <ToastContainer />
         <div className="row m-auto">
-          <div className="col-4">
+          <div className="col-12 col-sm-6 col-md-6 col-lg-6">
             <p style={{textAlign: "start", fontSize: "24px", color: "#ee00aa"}}><b>Field of Interests</b></p>
           </div>
-          <div className="col-4 text-start">
+          <div className="col-12 col-sm-6 col-md-6 col-lg-6 text-start">
             <button type="button" className="btn btn-primary fw-bold" data-toggle="modal" data-target="#exampleModalCenterfieldofinterest" style={{fontSize: "13px"}}>Add Interest</button>
           </div>
          </div>
 
-        <hr style={{marginTop: "-6px"}}/>
+        <hr />
 
-           <div className="row mt-0 text-start">
+           <div className="row mt-0 text-start p-2">
              {
               studentFieldOfInterest && studentFieldOfInterest.length==0 ? <p>Add your interests</p> : null
              } 
@@ -81,7 +81,7 @@ const FieldofInterestProfile = ({studentFieldOfInterest, fetchStudentDataFromSer
                    const value = window.confirm("Are you sure to delete this information.");
                    if(value){
                    try {
-                       const apiUrl = `http://localhost:8000/student/field-of-interest/delete`;
+                       const apiUrl = `/student/field-of-interest/delete`;
                        const data = {fieldsOfInterest: fieldsOfInterest};
                        const serverResponse = await axios.put(apiUrl, data, {withCredentials: true});
                        if(serverResponse.status == 200){
